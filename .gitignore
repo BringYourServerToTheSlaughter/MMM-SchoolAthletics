@@ -3,3 +3,5 @@ public/logos/
 .cache/
 coverage/
 .DS_Store
+
+images/uploads/

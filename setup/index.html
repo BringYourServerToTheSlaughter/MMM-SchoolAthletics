@@ -11,6 +11,7 @@
   <script defer src="setup.js"></script>
   <script defer src="apply-ui.js"></script>
   <script defer src="location.js"></script>
+  <script defer src="upload-ui.js"></script>
   <script defer src="preview-model.js"></script>
   <script defer src="preview-controller.js"></script>
 </head>
@@ -55,19 +56,26 @@
       </div>
       <div class="pair">
         <div class="field">
-          <label for="schoolLogo">School logo</label>
+          <label id="schoolLogo-label" for="schoolLogo">School logo</label>
           <input id="schoolLogo" name="schoolLogo" type="text" placeholder="images/school-logo.png" spellcheck="false" aria-describedby="schoolLogo-help image-note schoolLogo-error">
           <p class="help" id="schoolLogo-help">Use a small, optimized image. Transparent-background PNG is recommended.</p>
           <p class="error" id="schoolLogo-error" hidden></p>
+          <label id="schoolLogo-upload-label" for="schoolLogo-upload">Choose image</label>
+          <input id="schoolLogo-upload" type="file" accept="image/png,image/jpeg,image/webp" disabled aria-describedby="schoolLogo-upload-status">
+          <p id="schoolLogo-upload-status" class="help" role="status">Image upload requires the local setup helper. You can still enter an image path manually.</p>
         </div>
         <div class="field">
-          <label for="backgroundImage">Background image</label>
+          <label id="backgroundImage-label" for="backgroundImage">Background image</label>
           <input id="backgroundImage" name="backgroundImage" type="text" placeholder="images/background.jpg" spellcheck="false" aria-describedby="backgroundImage-help image-note backgroundImage-error">
           <p class="help" id="backgroundImage-help">Optional. Use an optimized image sized close to your display resolution.</p>
           <p class="error" id="backgroundImage-error" hidden></p>
+          <label id="backgroundImage-upload-label" for="backgroundImage-upload">Choose image</label>
+          <input id="backgroundImage-upload" type="file" accept="image/png,image/jpeg,image/webp" disabled aria-describedby="backgroundImage-upload-status">
+          <button id="sample-background" type="button">Use sample background</button>
+          <p id="backgroundImage-upload-status" class="help" role="status">Image upload requires the local setup helper. You can still enter an image path manually.</p>
         </div>
       </div>
-      <p class="notice" id="image-note">Image paths are saved in the generated text for a future screen layout; the athletics panes do not display them yet. Files must already be installed in the module folder. Nothing is uploaded or copied.</p>
+      <p class="notice" id="image-note">Image paths are saved in the generated text for a future screen layout; the athletics panes do not display them yet. Enter a module-relative path, or use the local helper to copy an image into this module. No image is sent to an external service.</p>
       <fieldset>
         <legend>Top of your display</legend>
         <div class="choices">
