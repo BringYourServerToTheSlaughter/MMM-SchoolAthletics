@@ -2,6 +2,8 @@
 
 The initial three source files were supplied by the maintainer as copies of a working production school-athletics module. No copyright or license notices were present in those supplied files. Original authorship and any earlier copied/adapted implementations must be verified by the maintainer before public release. No project-wide license is asserted here.
 
+Before selecting a project license, the maintainer must verify who authored the supplied JavaScript, CSS, and node helper; whether any portions came from MagicMirror or another project; the original licenses and required notices for any such portions; and that the relevant rights holders authorize redistribution under the proposed license. The repository's current history does not resolve those questions. No `LICENSE` is added, and `package.json` remains `UNLICENSED` pending verification.
+
 The refactor uses MagicMirror's documented module APIs (`Module.register`, lifecycle hooks, socket notifications, `NodeHelper.create`). Using those APIs does not establish that source code was copied from MagicMirror. No MagicMirror source is vendored here.
 
 Direct runtime dependencies (installed by npm, with original licenses retained in their packages):
