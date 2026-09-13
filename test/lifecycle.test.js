@@ -91,3 +91,54 @@ test("helper ignores malformed notifications and isolates logo failures", async 
   assert.equal(sent.length, 1);
   assert.equal(sent[0].type, "SCHOOL_ATHLETICS_EVENTS");
 });
+
+test("fresh or blank calendar renders neutral setup without requests or timers", () => {
+  for (const calendarUrl of [undefined, null, "", "  \n "]) {
+    const { instance, sent, timers } = frontend({ calendarUrl });
+    assert.equal(instance.getDom().textContent, "School Athletics Setup required");
+    instance.fetchEvents();
+    instance.resume();
+    instance.notificationReceived("DOM_OBJECTS_CREATED");
+    instance.socketNotificationReceived("SCHOOL_ATHLETICS_EVENTS", { instanceId: "one", requestId: 0, data: schedule() });
+    assert.equal(instance.getDom().textContent, "School Athletics Setup required");
+    assert.equal(instance.schedule, null);
+    assert.equal(sent.length, 0);
+    assert.equal(timers.size, 0);
+  }
+});
+
+test("helper rejects missing calendars before schedule or logo work", async () => {
+  const { instance, sent } = helper();
+  let calls = 0;
+  instance.service = { schedule: async () => { calls++; }, logos: { enrich: async () => { calls++; } } };
+  for (const config of [{}, { calendarUrl: "" }, { calendarUrl: "   " }]) {
+    await instance.socketNotificationReceived("SCHOOL_ATHLETICS_FETCH_EVENTS", { instanceId: "one", requestId: 1, config });
+  }
+  assert.equal(calls, 0);
+  assert.equal(sent.length, 3);
+  assert.ok(sent.every(reply => reply.type === "SCHOOL_ATHLETICS_EVENTS_ERROR"));
+});
+
+test("runtime defaults have no school identity, feed, images, aliases, or fixed timezone", () => {
+  const defaults = require("../shared/config").defaults();
+  for (const key of ["calendarUrl", "schoolName", "arbiterSchoolId", "schoolLogo", "backgroundImage", "timeZone"]) assert.equal(defaults[key], "");
+  assert.equal(defaults.logos.fallbackImage, "");
+  assert.deepEqual(defaults.logos.overrides, []);
+  assert.deepEqual(defaults.homeKeywords, []);
+  assert.deepEqual(defaults.theme, { homeAccent: "#ffffff", awayAccent: "#bdbdbd" });
+  assert.equal(Object.hasOwn(defaults, "weather"), false);
+  assert.doesNotMatch(fs.readFileSync("MMM-SchoolAthletics.css", "utf8"), /url\s*\(/i);
+});
+
+test("runtime does not import setup fixtures or use environment school fallbacks", () => {
+  const files = ["MMM-SchoolAthletics.js", "node_helper.js", "shared/config.js", ...fs.readdirSync("lib").filter(name => name.endsWith(".js")).map(name => `lib/${name}`)];
+  for (const file of files) {
+    assert.doesNotMatch(fs.readFileSync(file, "utf8"), /(?:require\s*\(|from\s+|import\s*\()[^\n]*setup\/|SchoolAthleticsPreview|mockData|process\.env/, file);
+  }
+  const { instance } = frontend();
+  instance.file = file => file;
+  assert.deepEqual(Array.from(instance.getScripts()), ["shared/config.js"]);
+  assert.deepEqual(Array.from(instance.getStyles()), ["MMM-SchoolAthletics.css"]);
+  assert.equal(instance.schedule, undefined);
+  instance.suspend();
+});

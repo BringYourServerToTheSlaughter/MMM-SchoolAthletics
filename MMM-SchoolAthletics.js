@@ -10,6 +10,14 @@ Module.register("MMM-SchoolAthletics", {
 		this.error = null;
 		this.requestId = 0;
 		this.suspended = false;
+		if (this.config?.calendarUrl == null || (typeof this.config.calendarUrl === "string" && !this.config.calendarUrl.trim())) {
+			this.config = SchoolAthleticsConfig.defaults();
+			this.loading = false;
+			this.invalidConfig = true;
+			this.setupRequired = true;
+			this.schedule = null;
+			return;
+		}
 		try { this.config = SchoolAthleticsConfig.normalize(this.config); }
 		catch (error) { this.loading = false; this.error = error.message; this.invalidConfig = true; return; }
 		this.fetchEvents();
@@ -65,7 +73,7 @@ Module.register("MMM-SchoolAthletics", {
 	},
 
 	socketNotificationReceived(notification, payload) {
-		if (!payload || payload.instanceId !== this.identifier || payload.requestId !== this.requestId || this.suspended) return;
+		if (this.invalidConfig || !payload || payload.instanceId !== this.identifier || payload.requestId !== this.requestId || this.suspended) return;
 		if (notification === "SCHOOL_ATHLETICS_EVENTS" || notification === "SCHOOL_ATHLETICS_EVENTS_ERROR") {
 			clearTimeout(this.watchdog);
 			this.pending = false;
@@ -92,6 +100,16 @@ Module.register("MMM-SchoolAthletics", {
 	getDom() {
 		const wrapper = document.createElement("div");
 		wrapper.className = `school-athletics-wrapper layout-${this.config.layout || "auto"}`;
+		if (this.setupRequired) {
+			const setup = this.message("", "setup");
+			for (const text of ["School Athletics", "Setup required"]) {
+				const line = document.createElement("div");
+				line.textContent = text;
+				setup.appendChild(line);
+			}
+			wrapper.appendChild(setup);
+			return wrapper;
+		}
 		if (this.config.theme) {
 			wrapper.style.setProperty("--school-home-accent", this.config.theme.homeAccent);
 			wrapper.style.setProperty("--school-away-accent", this.config.theme.awayAccent);
