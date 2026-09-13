@@ -1,21 +1,55 @@
-# Provenance and third-party components
+# Third-party notices
 
-The initial three source files were supplied by the maintainer as copies of a working production school-athletics module. No copyright or license notices were present in those supplied files. Original authorship and any earlier copied/adapted implementations must be verified by the maintainer before public release. No project-wide license is asserted here.
+MMM-SchoolAthletics project source code is licensed under the MIT License.
+See [LICENSE](LICENSE).
 
-Before selecting a project license, the maintainer must verify who authored the supplied JavaScript, CSS, and node helper; whether any portions came from MagicMirror or another project; the original licenses and required notices for any such portions; and that the relevant rights holders authorize redistribution under the proposed license. The repository's current history does not resolve those questions. No `LICENSE` is added, and `package.json` remains `UNLICENSED` pending verification.
+## Direct dependencies
 
-The refactor uses MagicMirror's documented module APIs (`Module.register`, lifecycle hooks, socket notifications, `NodeHelper.create`). Using those APIs does not establish that source code was copied from MagicMirror. No MagicMirror source is vendored here.
-
-Direct dependencies (installed by npm, with original licenses retained in their packages; Acorn is used only by the optional setup helper):
+The project uses the following third-party packages under their respective
+licenses:
 
 | Dependency | Version | License | Source |
 | --- | --- | --- | --- |
 | acorn | 8.15.0 | MIT | https://github.com/acornjs/acorn |
-| node-ical | 0.27.1 | Apache-2.0 | https://github.com/jens-maus/node-ical |
 | cheerio | 1.2.0 | MIT | https://github.com/cheeriojs/cheerio |
 | ipaddr.js | 2.3.0 | MIT | https://github.com/whitequark/ipaddr.js |
+| node-ical | 0.27.1 | Apache-2.0 | https://github.com/jens-maus/node-ical |
 | sharp | 0.35.4 | Apache-2.0 | https://github.com/lovell/sharp |
 
-Transitive dependencies, including Sharp's platform binaries/libvips, carry their own licenses and notices in the installed packages. Preserve those notices if distributing a bundled installation; `package-lock.json` records the dependency tree. node-ical documents its origins in Peter Braden's ical.js project and includes its own attribution.
+Those packages, their transitive dependencies, and their notices remain subject
+to their respective licenses. Transitive dependencies, including Sharp's
+platform binaries and libvips components, may carry additional licenses.
+Preserve the applicable notices when distributing a bundled installation.
+`package-lock.json` records the dependency tree.
 
-School names, trademarks, and logos remain associated with their respective owners. Automatic logo caching does not assign a license to those images. No discovered logos or production calendar data are included in the source tree or test fixtures.
+node-ical documents its origins in Peter Braden's ical.js project and retains
+its own attribution and licensing information.
+
+## MagicMirror
+
+MagicMirror² is a separate project. MMM-SchoolAthletics uses MagicMirror's
+documented module APIs, including `Module.register`, lifecycle hooks, socket
+notifications, and `NodeHelper.create`. MagicMirror source code is not vendored
+in this repository.
+
+## ArbiterSports
+
+ArbiterSports is a separate service. MMM-SchoolAthletics is not affiliated with
+or endorsed by ArbiterSports.
+
+## Logos, trademarks, and branding
+
+School names, mascots, logos, trademarks, and other third-party branding remain
+the property of their respective owners. Automatic logo discovery or caching
+does not assign a license to those images.
+
+Downloaded opponent logos and production calendar data are not distributed as
+part of the source repository.
+
+The PingState name and logo, including `setup/assets/pingstate.png`, are not
+licensed under the MMM-SchoolAthletics MIT License.
+
+The preview image at `docs/assets/mmm-schoolathletics-preview.png` may depict
+school names, logos, mascots, or other third-party marks. Those marks and the
+preview image are not licensed for reuse under the MMM-SchoolAthletics MIT
+License.

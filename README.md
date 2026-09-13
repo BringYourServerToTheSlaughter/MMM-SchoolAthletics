@@ -80,7 +80,7 @@ Choose **1920×1080**, **3840×2160**, **1366×768**, **1920×1200**, or custom 
 
 **Typical**, **Long Names**, and **Maximum Games** use mock data to test wrapping and crowding. **Show safe area** adds a visual 4% inset without changing layout. A status reports obvious header overflow, pane overflow, or clipped rows. Stress modes may intentionally exceed the available area. The simulator is approximate; actual MagicMirror themes/fonts may differ. It does not test live calendars, weather, or TV physical size.
 
-## Troubleshooting and release status
+## Troubleshooting
 
 - **No schedule:** check the required HTTPS subscription URL and MagicMirror logs. A school ID alone cannot provide schedules. Events without classification are hidden by default; check title markers and home venue keywords.
 - **Wrong dates/times:** verify the selected school timezone and display system clock.
@@ -89,4 +89,11 @@ Choose **1920×1080**, **3840×2160**, **1366×768**, **1920×1200**, or custom 
 
 Defaults and advanced options are documented in `shared/config.js` and `config.schema.json`. Run `npm run check` and `npm test` for local validation. Arbiter HTML changes can break logo discovery; live feed and target-device verification remain outstanding.
 
-**Public-release blocker:** original source authorship and licensing still need verification. No project license has been granted (`UNLICENSED`); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Do not treat this repository as MIT-licensed yet. Dependency notices and logo owners' rights remain applicable.
+## License
+
+MMM-SchoolAthletics source code is released under the [MIT License](LICENSE).
+
+Third-party libraries retain their respective licenses. School logos,
+trademarks, the PingState brand, and other third-party or branding assets are
+not licensed under the MIT License. See
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for details.

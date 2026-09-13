@@ -17,5 +17,5 @@
     "node-ical": "0.27.1",
     "sharp": "0.35.4"
   },
-  "license": "UNLICENSED"
+  "license": "MIT"
 }
