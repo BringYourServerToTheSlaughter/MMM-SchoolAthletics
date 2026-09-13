@@ -19,10 +19,25 @@
       accentColor: defaults.theme.homeAccent,
       schoolLogo: defaults.schoolLogo, backgroundImage: defaults.backgroundImage,
       // Screen choices belong to this page only, not the athletics runtime config.
-      showDateTime: true, showSchoolName: true, showWeather: false
+      showDateTime: true, showSchoolName: true, showWeather: false, outputMode: "module", latitude: "", longitude: ""
     };
   }
+  function coordinates(state) {
+    const number = (value, limit) => {
+      if ((typeof value !== "number" && typeof value !== "string") || String(value).trim() === "" || !/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(String(value).trim())) return null;
+      const result = Number(value);
+      return Number.isFinite(result) && Math.abs(result) <= limit ? result : null;
+    };
+    const lat = number(state.latitude, 90), lon = number(state.longitude, 180);
+    return lat === null || lon === null ? null : { lat, lon };
+  }
   function companionNotes(state) {
+    if (state.outputMode === "clean") return [
+      "Replace the entire existing modules: [...] section with this section; do not append it. Keep the rest of config.js.",
+      "Clean layout always includes clock/date at top_left.",
+      state.showSchoolName ? "School name is retained in athletics config; arrange a separate header at top_center. No school-name module is generated." : "School name: leave the companion header off.",
+      "Apply preserves one existing current-weather widget at top_right when safely identifiable, independently of preview toggles. If none exists, Apply uses valid supplied coordinates for current Open-Meteo weather. Otherwise weather is omitted. Copied output has no weather settings; retain your configured current-weather entry manually."
+    ];
     return [
       state.showDateTime ? "Date/time: enable a separate clock module at top_left." : "Date/time: leave the companion clock off.",
       state.showSchoolName ? "School name: arrange a separate school-name header at top_center." : "School name: leave the companion header off.",
@@ -32,6 +47,7 @@
   }
   function generate(state) {
     const errors = {};
+    if (state.outputMode !== undefined && !["module", "clean"].includes(state.outputMode)) errors.outputMode = "Choose an output mode.";
     const text = key => typeof state[key] === "string" ? state[key].trim() : "";
     const candidate = {};
     try { candidate.calendarUrl = shared.arbiterUrl(text("calendarUrl")).href; }
@@ -57,8 +73,10 @@
     if (candidate.schoolLogo || candidate.backgroundImage) notes.push("Image paths are reserved for a future screen layout; the athletics panes do not display these images yet.");
     if (Object.keys(errors).length) return { errors, notes, output: "", entry: null };
     const entry = { module: "MMM-SchoolAthletics", position: "middle_center", config: candidate };
-    const output = notes.map(note => `// ${note}`).join("\n") + "\n" + JSON.stringify(entry, null, 2);
+    const modules = state.outputMode === "clean" || state.showDateTime ? [{ module: "clock", position: "top_left" }, entry] : [entry];
+    const body = state.outputMode === "clean" ? `modules: ${JSON.stringify(modules, null, 2)}` : JSON.stringify(entry, null, 2);
+    const output = notes.map(note => `// ${note}`).join("\n") + "\n" + body;
     return { errors, notes, output, entry };
   }
-  return { initialState, validTimeZone, companionNotes, generate };
+  return { initialState, validTimeZone, coordinates, companionNotes, generate };
 });

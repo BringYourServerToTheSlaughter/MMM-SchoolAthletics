@@ -78,7 +78,7 @@ test("setup assets are local and policy blocks network requests/form submission"
 });
 
 function formHarness(clipboard) {
-  const ids = ["setup-form", "generated-config", "copy-config", "copy-status", "companion-notes", "accentColor-value", "form-error"];
+  const ids = ["setup-form", "generated-config", "copy-config", "copy-status", "companion-notes", "accentColor-value", "form-error", "output-help"];
   const stateKeys = Object.keys(setup.initialState("UTC"));
   const nodes = new Map();
   function node(id = "") {
@@ -126,4 +126,45 @@ test("clipboard unavailability selects output and gives keyboard-copy instructio
   let prevented = false;
   nodes.get("setup-form").handlers.submit({ preventDefault() { prevented = true; } });
   assert.equal(prevented, true);
+});
+
+test("module output remains the default and accepts legacy state without a mode", () => {
+  const legacy = state();
+  delete legacy.outputMode;
+  assert.equal(setup.generate(legacy).output, setup.generate(state({ outputMode: "module" })).output);
+  assert.equal(setup.initialState("UTC").outputMode, "module");
+});
+
+test("clean output is a replacement modules property containing only athletics and optional clock", () => {
+  for (const showDateTime of [true, false]) {
+    for (const showWeather of [true, false]) {
+      const result = setup.generate(state({ outputMode: "clean", showDateTime, showWeather, schoolName: 'Example "Academy"' }));
+      assert.deepEqual(result.errors, {});
+      assert.match(result.output, /modules: \[/);
+      const config = JSON.parse(JSON.stringify(vm.runInNewContext(`({\n${result.output}\n})`)));
+      assert.deepEqual(config.modules.map(entry => entry.module), ["clock", "MMM-SchoolAthletics"]);
+      if (showDateTime) assert.deepEqual(config.modules[0], { module: "clock", position: "top_left" });
+      const athletics = config.modules.at(-1);
+      assert.deepEqual(athletics, result.entry);
+      assert.equal(shared.normalize(athletics.config).schoolName, 'Example "Academy"');
+      assert.equal(Object.hasOwn(athletics.config, "outputMode"), false);
+      assert.doesNotMatch(result.output, /alert|updatenotification|compliments|newsfeed|US holidays|New York|New_York|"module": "calendar"|apiKey|latitude|longitude|"provider"|"location"/i);
+      assert.match(result.output, /Apply preserves one existing current-weather widget/);
+    }
+  }
+});
+
+test("output selector updates replacement instructions and copied text", async () => {
+  let copied;
+  const { nodes, change } = formHarness({ writeText: async text => { copied = text; } });
+  change("calendarUrl", state().calendarUrl);
+  nodes.get("outputMode").value = "clean";
+  nodes.get("outputMode").handlers.change();
+  assert.match(nodes.get("output-help").textContent, /Replace the entire existing/);
+  await nodes.get("copy-config").handlers.click();
+  assert.match(copied, /modules: \[/);
+  nodes.get("outputMode").value = "module";
+  nodes.get("outputMode").handlers.change();
+  assert.equal(vm.runInNewContext(`(${nodes.get("generated-config").value})`).module, "MMM-SchoolAthletics");
+  assert.equal(setup.generate(state({ outputMode: "invalid" })).output, "");
 });

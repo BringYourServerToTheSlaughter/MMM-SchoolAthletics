@@ -137,7 +137,7 @@ test("runtime does not import setup fixtures or use environment school fallbacks
   }
   const { instance } = frontend();
   instance.file = file => file;
-  assert.deepEqual(Array.from(instance.getScripts()), ["shared/config.js"]);
+  assert.deepEqual(Array.from(instance.getScripts()), ["shared/config.js", "shared/layout.js"]);
   assert.deepEqual(Array.from(instance.getStyles()), ["MMM-SchoolAthletics.css"]);
   assert.equal(instance.schedule, undefined);
   instance.suspend();

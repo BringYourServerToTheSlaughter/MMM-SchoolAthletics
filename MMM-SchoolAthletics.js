@@ -1,7 +1,7 @@
 Module.register("MMM-SchoolAthletics", {
 	defaults: {},
 
-	getScripts() { return [this.file("shared/config.js")]; },
+	getScripts() { return [this.file("shared/config.js"), this.file("shared/layout.js")]; },
 	getStyles() { return ["MMM-SchoolAthletics.css"]; },
 
 	start() {
@@ -27,8 +27,31 @@ Module.register("MMM-SchoolAthletics", {
 	notificationReceived(notification) {
 		if (notification === "DOM_OBJECTS_CREATED") {
 			this.domReady = true;
+			this.observeLayout();
 			this.updateDom(0);
 		}
+	},
+
+	observeLayout() {
+		if (this.layoutObserver || typeof document.getElementById !== "function") return;
+		const module = document.getElementById(this.identifier);
+		const region = module?.closest(".region.middle.center");
+		if (!region) return;
+		const update = () => {
+			const modules = region.querySelectorAll(".module");
+			const alone = modules.length === 1 && modules[0] === module;
+			region.classList.toggle("school-athletics-region", alone);
+			if (!alone) return;
+			const visibleBounds = selector => Array.from(document.querySelectorAll(selector)).filter(el => el.getClientRects().length && el.getBoundingClientRect().height > 0).map(el => el.getBoundingClientRect());
+			const area = SchoolAthleticsLayout.bounds(document.body.getBoundingClientRect(), window.innerHeight,
+				visibleBounds(".region.top"), visibleBounds(".region.bottom"), Math.min(32, Math.max(18, window.innerWidth * .016)));
+			region.style.setProperty("--athletics-region-top", `${area.top}px`);
+			region.style.setProperty("--athletics-region-height", `${area.height}px`);
+		};
+		this.layoutObserver = new ResizeObserver(update);
+		for (const el of [document.body, ...document.querySelectorAll(".region.top, .region.bottom")]) this.layoutObserver.observe(el);
+		window.addEventListener("resize", update);
+		update();
 	},
 
 	startTimers() {

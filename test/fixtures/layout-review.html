@@ -1,0 +1,6 @@
+<!doctype html><html><head><title>Responsive layout review</title></head><body>
+<script>
+for(const [width,height] of [[1920,1080],[3840,2160],[900,700]]) {
+const frame=document.createElement('iframe');frame.src='layout.html';frame.width=width;frame.height=height;frame.style.cssText='transform:scale(.2);transform-origin:top left;position:absolute;left:0;top:0;';frame.dataset.resolution=width+'x'+height;document.body.appendChild(frame);
+}
+</script></body></html>

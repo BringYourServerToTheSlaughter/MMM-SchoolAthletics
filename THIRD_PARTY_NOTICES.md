@@ -6,10 +6,11 @@ Before selecting a project license, the maintainer must verify who authored the 
 
 The refactor uses MagicMirror's documented module APIs (`Module.register`, lifecycle hooks, socket notifications, `NodeHelper.create`). Using those APIs does not establish that source code was copied from MagicMirror. No MagicMirror source is vendored here.
 
-Direct runtime dependencies (installed by npm, with original licenses retained in their packages):
+Direct dependencies (installed by npm, with original licenses retained in their packages; Acorn is used only by the optional setup helper):
 
 | Dependency | Version | License | Source |
 | --- | --- | --- | --- |
+| acorn | 8.15.0 | MIT | https://github.com/acornjs/acorn |
 | node-ical | 0.27.1 | Apache-2.0 | https://github.com/jens-maus/node-ical |
 | cheerio | 1.2.0 | MIT | https://github.com/cheeriojs/cheerio |
 | ipaddr.js | 2.3.0 | MIT | https://github.com/whitequark/ipaddr.js |

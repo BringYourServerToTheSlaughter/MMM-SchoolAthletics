@@ -1,3 +1,27 @@
+/* Only take over middle-center when athletics is its sole module. */
+.region.middle.center.school-athletics-region {
+  top: var(--athletics-region-top);
+  height: var(--athletics-region-height);
+  transform: none;
+}
+.school-athletics-region > .container {
+  height: 100%;
+  min-height: 0;
+}
+.school-athletics-region .MMM-SchoolAthletics {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.school-athletics-region .MMM-SchoolAthletics .module-content {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.region.school-athletics-region .MMM-SchoolAthletics .school-athletics-wrapper.layout-auto {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 /* Module styles; accent colors come from validated per-instance configuration. */
 .MMM-SchoolAthletics {
 	width: 100%;
@@ -12,6 +36,8 @@
 
 .MMM-SchoolAthletics .school-athletics-wrapper {
 	display: grid;
+	min-height: 0;
+	grid-auto-rows: minmax(0, 1fr);
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: clamp(18px, 1.6vw, 32px);
 	width: 100%;
@@ -24,9 +50,10 @@
 	flex-direction: column;
 	box-sizing: border-box;
 	min-width: 0;
+	min-height: 0;
 	height: 100%;
 	padding: clamp(17px, 1.35vw, 26px);
-	overflow: auto;
+	overflow: hidden;
 	background: rgba(5, 5, 8, 0.70);
 	border: 1px solid rgba(255, 255, 255, 0.22);
 	border-top: 4px solid var(--school-home-accent, #ffffff);
@@ -65,14 +92,17 @@
 
 .MMM-SchoolAthletics .school-athletics-today-list {
 	display: flex;
-	flex: 1 0 auto;
+	flex: 1 1 0;
+	overflow-y: auto;
+	overflow-x: hidden;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: safe center;
 	min-height: 0;
-	padding: 8px 0;
+	padding: 8px 0 14px;
 }
 
 .MMM-SchoolAthletics .school-athletics-game {
+	flex: 0 0 auto;
 	display: grid;
 	grid-template-columns: max-content minmax(0, 1fr) auto;
 	align-items: center;
@@ -190,6 +220,11 @@
 }
 
 .MMM-SchoolAthletics .school-athletics-upcoming {
+	display: grid;
+	grid-template-columns: max-content minmax(0, 1fr);
+	column-gap: 22px;
+	max-height: 35%;
+	overflow: auto;
 	flex: 0 0 auto;
 	padding-top: 9px;
 	border-top: 2px solid var(--school-home-accent, #ffffff);
@@ -200,6 +235,10 @@
 }
 
 .MMM-SchoolAthletics .school-athletics-upcoming h3 {
+	min-width: 0;
+	contain: inline-size;
+	grid-column: 1 / -1;
+	text-align: center;
 	margin: 0 0 5px;
 	color: #fff;
 	font-size: clamp(14px, 0.95vw, 18px);
@@ -209,8 +248,11 @@
 
 .MMM-SchoolAthletics .school-athletics-upcoming-row {
 	display: grid;
-	grid-template-columns: max-content minmax(0, 1fr);
-	gap: 10px;
+	grid-column: 1 / -1;
+	grid-template-columns: subgrid;
+	text-align: left;
+	column-gap: 22px;
+	row-gap: 10px;
 	padding: 3px 0;
 	font-size: clamp(13px, 0.9vw, 17px);
 	line-height: 1.15;
@@ -225,8 +267,9 @@
 	overflow: hidden;
 	color: #e7e7e7;
 	font-weight: 600;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	min-width: 0;
+	white-space: normal;
+	overflow-wrap: anywhere;
 }
 
 .MMM-SchoolAthletics .school-athletics-game.cancelled {
@@ -333,5 +376,6 @@
   }
   .MMM-SchoolAthletics .school-athletics-pane .school-athletics-game-team { font-size: 25px; }
   .MMM-SchoolAthletics .school-athletics-pane .school-athletics-game-opponent { font-size: 18px; }
+  .MMM-SchoolAthletics .school-athletics-upcoming { grid-template-columns: minmax(0, 1fr); }
   .MMM-SchoolAthletics .school-athletics-upcoming-row { grid-template-columns: minmax(0, 1fr); gap: 1px; }
 }

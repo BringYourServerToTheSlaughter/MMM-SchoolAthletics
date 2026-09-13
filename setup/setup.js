@@ -37,6 +37,9 @@
       state[key] = control.type === "checkbox" ? control.checked : control.value;
     }
     result = model.generate(state);
+    document.getElementById("output-help").textContent = state.outputMode === "clean"
+      ? "Replace the entire existing modules: [...] section in MagicMirror's config.js with this output. Do not append it or replace the whole file. Keep commas between config properties."
+      : "Copy this entry into the modules array in MagicMirror's config.js. Add a comma between neighboring entries.";
     document.getElementById("accentColor-value").textContent = state.accentColor.toUpperCase();
     for (const key of [...fields, "form"]) {
       const error = document.getElementById(`${key}-error`);
@@ -57,6 +60,7 @@
     }));
   }
   form.addEventListener("submit", event => event.preventDefault());
+  document.getElementById("outputMode").addEventListener("change", render);
   form.addEventListener("input", event => { touched.add(event.target.id); render(); });
   form.addEventListener("change", event => { touched.add(event.target.id); render(); });
   form.addEventListener("focusout", event => { touched.add(event.target.id); render(); });

@@ -1,0 +1,55 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Athletics layout fixture</title>
+<link rel="stylesheet" href="../../MMM-SchoolAthletics.css">
+<style>
+/* Minimal reproduction of MagicMirror's absolute region/flex container geometry.
+   Reference: MagicMirrorOrg/MagicMirror css/main.css (not vendored). */
+body { position:absolute; margin:4vh 4vw; width:92vw; height:92vh; background:black; color:white; font-family:Arial; }
+.region { position:absolute; } .region.top { top:0; height:15vh; } .region.bottom {bottom:0;}
+.region.middle.center {width:100%;top:50%;transform:translateY(-50%);}
+.region.middle.center.school-athletics-region {top:var(--athletics-region-top);height:var(--athletics-region-height);transform:none;}
+.region .container {display:flex;flex-direction:column;}
+</style>
+<script src="../../shared/config.js"></script><script src="../../shared/layout.js"></script>
+<script>var definition; var Module={register(name,value){definition=value;}};</script>
+<script src="../../MMM-SchoolAthletics.js"></script></head><body>
+<div class="region top">Clock / weather reserved area</div>
+<div class="region middle center"><div class="container"><div id="fixture" class="module MMM-SchoolAthletics"><div class="module-content"></div></div></div></div>
+<script>
+const instance=Object.assign({},definition,{identifier:'fixture',config:SchoolAthleticsConfig.normalize({calendarUrl:'https://www.arbiterlive.com/calendar/example.ics'}),loading:false});
+const count=Number(new URLSearchParams(location.search).get('count') || 3);
+const game={id:'fixture',team:'Varsity Soccer',opponent:'Example Academy',kind:'home',start:'2026-09-12T18:00:00Z',date:'2026-09-12'};
+const upcoming=[game,{...game,allDay:true,team:"Regional Championship Soccer Development Team",opponent:"Example International Preparatory Academy"}];
+instance.schedule={date:'2026-09-12',home:{today:Array.from({length:count},()=>({...game})),upcoming},away:{today:[],upcoming:upcoming.map(g=>({...g,kind:'away'}))}};
+document.querySelector('.module-content').appendChild(instance.getDom());instance.observeLayout();
+requestAnimationFrame(() => requestAnimationFrame(() => {
+  const panes=Array.from(document.querySelectorAll('.school-athletics-pane'));
+  const rects=panes.map(p=>p.getBoundingClientRect());
+  const checks={equalHeight:Math.abs(rects[0].height-rects[1].height)<1,equalWidth:Math.abs(rects[0].width-rects[1].width)<1,
+    fillsRegion:Math.abs(rects[0].height-document.querySelector('.region.middle').getBoundingClientRect().height)<1,
+    safeEdge:Math.abs(rects[0].bottom-innerHeight*.96)<1};
+  for(const [i,p] of panes.entries()) {
+    const list=p.querySelector('.school-athletics-today-list'),r=list.getBoundingClientRect();
+    const empty=p.querySelector('.school-athletics-empty')?.getBoundingClientRect();
+    if(empty) checks.emptyCentered=Math.abs((empty.top+empty.bottom-r.top-r.bottom)/2)<1;
+    checks['todayContained'+i]=r.top>=rects[i].top && r.bottom<=rects[i].bottom && (list.scrollHeight<=list.clientHeight+1 || getComputedStyle(list).overflowY==='auto');
+    const rows=Array.from(p.querySelectorAll('.school-athletics-upcoming-row'));
+    for(const cls of ['when','name']) {
+      const cells=rows.map(row=>row.querySelector('.school-athletics-upcoming-'+cls));
+      checks[cls+'Aligned'+i]=cells.every(cell=>Math.abs(cell.getBoundingClientRect().left-cells[0].getBoundingClientRect().left)<1 && getComputedStyle(cell).textAlign==='left');
+    }
+    const when=rows[0].querySelector('.school-athletics-upcoming-when').getBoundingClientRect();
+    const description=rows[0].querySelector('.school-athletics-upcoming-name').getBoundingClientRect();
+    if(description.left>when.left+1) {
+      const widths=rows.map(row=>{const range=document.createRange();range.selectNodeContents(row.querySelector('.school-athletics-upcoming-when'));return range.getBoundingClientRect().width;});
+      checks['compactDateColumn'+i]=Math.abs(when.width-Math.max(...widths))<1;
+      checks['columnGap'+i]=Math.abs(description.left-when.right-22)<1;
+    }
+    checks['headingCentered'+i]=getComputedStyle(p.querySelector('.school-athletics-upcoming h3')).textAlign==='center';
+    checks['namesWrap'+i]=getComputedStyle(p.querySelector('.school-athletics-upcoming-name')).whiteSpace==='normal';
+    const padding=parseFloat(getComputedStyle(p).paddingBottom)+parseFloat(getComputedStyle(p).borderBottomWidth);
+    checks['upcomingBottom'+i]=Math.abs(rects[i].bottom-p.querySelector('.school-athletics-upcoming').getBoundingClientRect().bottom-padding)<1;
+  }
+  document.body.dataset.layoutChecks=JSON.stringify(checks);
+  if(Object.values(checks).some(pass=>!pass)) throw new Error('Layout checks failed: '+JSON.stringify(checks));
+}));
+</script></body></html>

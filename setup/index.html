@@ -9,6 +9,8 @@
   <script defer src="../shared/config.js"></script>
   <script defer src="generator.js"></script>
   <script defer src="setup.js"></script>
+  <script defer src="apply-ui.js"></script>
+  <script defer src="location.js"></script>
   <script defer src="preview-model.js"></script>
   <script defer src="preview-controller.js"></script>
 </head>
@@ -75,14 +77,31 @@
         </div>
         <p class="help">These choices generate reminders for separate MagicMirror modules. Weather needs your own provider settings.</p>
       </fieldset>
+      <fieldset>
+        <legend>Weather location</legend>
+        <p class="help">Coordinates are used only to configure the MagicMirror current-weather widget when Clean Apply cannot preserve one. Location lookup only fills these fields; Apply saves them through the local helper. MagicMirror later uses them to request weather.</p>
+        <div class="pair">
+          <div><label for="latitude">Latitude</label><input id="latitude" type="text" inputmode="decimal" placeholder="-90 to 90"></div>
+          <div><label for="longitude">Longitude</label><input id="longitude" type="text" inputmode="decimal" placeholder="-180 to 180"></div>
+        </div>
+        <button id="use-location" type="button">Use my current location</button>
+        <p id="location-status" role="status" class="help">Enter coordinates manually or allow browser location access. No external geocoding service is used.</p>
+      </fieldset>
       <p class="error" id="form-error" hidden></p>
     </form>
     <section class="generated" aria-labelledby="generated-title">
       <h2 id="generated-title">Generated configuration</h2>
+      <label for="outputMode">Output mode</label>
+      <select id="outputMode" aria-describedby="output-mode-help"><option value="module">Athletics module only</option><option value="clean">Clean athletics display</option></select>
+      <p id="output-mode-help" class="help">Clean athletics display optimizes MagicMirror for an athletics screen. Applying removes calendars, compliments, news feeds, forecasts, and other stock/sample widgets. It keeps clock/date, preserves your existing current-weather widget when possible, and makes athletics the primary display.</p>
       <p id="output-help">Copy this entry into the <code>modules</code> array in MagicMirror's <code>config.js</code>. Add a comma between neighboring entries.</p>
       <label class="sr-only" for="generated-config">Generated MagicMirror configuration</label>
       <textarea id="generated-config" readonly spellcheck="false" rows="15" aria-describedby="output-help" placeholder="Enter an Arbiter calendar URL to generate your configuration."></textarea>
       <div class="copy-row"><button id="copy-config" type="button" disabled>Copy configuration</button><span id="copy-status" role="status" aria-live="polite"></span></div>
+      <p id="apply-target" class="help">Target unavailable: local apply helper is not connected.</p>
+      <p class="help">Clean athletics display: This replaces your current module layout. A backup of config.js will be created automatically before changes are made.</p>
+      <button id="apply-config" type="button" disabled>Apply to MagicMirror</button>
+      <p id="apply-status" role="status">To enable Apply, run node setup/server.js and open http://127.0.0.1:8081/setup/. Copy configuration remains available.</p>
       <ul id="companion-notes" class="help"></ul>
     </section>
     <section id="display-preview" aria-labelledby="preview-title">
@@ -107,7 +126,7 @@
       <p id="preview-status" role="status" aria-live="polite">Checking layout…</p>
       <p id="preview-images" class="error" role="status"></p>
     </section>
-    <footer>Works offline. Your entries stay on this page until you close or reload it. No configuration is saved automatically.</footer>
+    <footer>Works offline. Your entries stay on this page until you close or reload it. Configuration is written only when you click Apply to MagicMirror using the local helper.</footer>
   </main>
 </body>
 </html>

@@ -23,7 +23,7 @@ Open [the setup page](http://localhost:8080/setup/). Stop the server with Ctrl+C
 
 Supply your **Arbiter iCal/calendar subscription URL** in the required `calendarUrl` field. This HTTPS URL supplies schedule data; an HTML school/team page is not a calendar feed. The optional `arbiterSchoolId` only assists automatic opponent-logo discovery. Schedules and manual logos work without it.
 
-Choose your school name, accent, and timezone, optionally enter image paths, then review the preview and copy the generated configuration into MagicMirror's `config.js`. The page never writes that file, saves entries, uploads images, or contacts Arbiter/weather services. Header choices generate reminders for separate MagicMirror clock, school-name, and weather modules; they do not configure those modules.
+Choose your school name, accent, and timezone, optionally enter image paths, then review the preview and copy the generated configuration into MagicMirror's `config.js`. The static page never writes that file, saves entries, uploads images, or contacts Arbiter/weather services. The optional local helper below can apply configuration after an explicit click. Header choices generate reminders for separate MagicMirror clock, school-name, and weather modules; they do not configure those modules.
 
 Minimal manual configuration (replace the fake URL placeholder):
 
@@ -39,6 +39,14 @@ Minimal manual configuration (replace the fake URL placeholder):
   }
 }
 ```
+
+## Optional Apply to MagicMirror
+
+From this module folder, run `node setup/server.js` and open `http://127.0.0.1:8081/setup/`. The helper detects `../../config/config.js` when installed under MagicMirror's `modules` folder. Only if detection is unavailable, use `node setup/server.js --config /absolute/path/to/config.js`. The target must already exist; the page displays it before enabling **Apply to MagicMirror**.
+
+Generate valid settings, review the output mode and target, then click Apply. Module-only mode adds or replaces the athletics entry while retaining unrelated modules. Clean mode replaces the entire modules array with a top-left clock, one safely identifiable existing current-weather widget at top-right when available, and athletics in middle-center. Forecasts and unrelated widgets are removed. Clean mode keeps clock/current weather independently of the preview toggles. Weather preservation requires Apply; copied output cannot inspect existing settings. A timestamped backup is created beside the target before an atomic replacement. Restart MagicMirror yourself afterward. Stop the helper with Ctrl+C when done. Copy configuration remains available, including with the Python server.
+
+The helper listens only on IPv4 loopback and accepts same-origin writes. It uses Acorn to parse configuration without executing it. It supports a literal `var`/`let`/`const config` object with one literal `modules` array; dynamic configurations, symlink targets, and multiple existing athletics entries in module-only mode require manual editing. It checks for changes since the page loaded; reload after an external edit. Backups are retained for manual recovery and are not automatically deleted. School-name headers still require separate configuration. Weather recognition requires a literal built-in `weather` entry with `config.type: "current"`, an explicit provider, and an explicit location/locationID or lat/lon. Disabled or ambiguous dynamic entries are skipped; the first eligible top-right widget is preferred, otherwise the first eligible widget is moved there. Provider/location/config source is preserved, but provider credentials and live operation are not verified.
 
 ## Schedule and logos
 
