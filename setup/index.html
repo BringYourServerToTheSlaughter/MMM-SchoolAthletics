@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'">
+  <title>MMM-SchoolAthletics Setup</title>
+  <link rel="stylesheet" href="setup.css">
+  <script defer src="../shared/config.js"></script>
+  <script defer src="generator.js"></script>
+  <script defer src="setup.js"></script>
+  <script defer src="preview-model.js"></script>
+  <script defer src="preview-controller.js"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">SCHOOL ATHLETICS</p>
+      <h1>MMM-SchoolAthletics Setup</h1>
+      <p>Configure the basics for your school athletics display, then copy the generated configuration into MagicMirror.</p>
+    </header>
+    <noscript>This page needs JavaScript to generate your configuration. It works entirely offline.</noscript>
+    <form id="setup-form" novalidate>
+      <div class="field">
+        <label for="schoolName">School name <span class="optional">optional</span></label>
+        <input id="schoolName" name="schoolName" type="text" placeholder="Example High School" aria-describedby="schoolName-error">
+        <p class="error" id="schoolName-error" hidden></p>
+      </div>
+      <div class="field">
+        <label for="calendarUrl">Arbiter calendar URL <span class="required">required</span></label>
+        <input id="calendarUrl" name="calendarUrl" type="url" required placeholder="https://…" spellcheck="false" autocomplete="off" aria-describedby="calendarUrl-help calendarUrl-error">
+        <p class="help" id="calendarUrl-help">Paste the iCal calendar subscription URL for your school.</p>
+        <p class="error" id="calendarUrl-error" hidden></p>
+      </div>
+      <div class="pair">
+        <div class="field">
+          <label for="arbiterSchoolId">Arbiter school ID</label>
+          <input id="arbiterSchoolId" name="arbiterSchoolId" type="text" inputmode="numeric" placeholder="12345" aria-describedby="arbiterSchoolId-help arbiterSchoolId-error">
+          <p class="help" id="arbiterSchoolId-help">Optional. Used for automatic opponent-logo discovery.</p>
+          <p class="error" id="arbiterSchoolId-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="timeZone">Time zone</label>
+          <select id="timeZone" name="timeZone" aria-describedby="timeZone-help timeZone-error"></select>
+          <p class="help" id="timeZone-help">Check that this matches your school's location.</p>
+          <p class="error" id="timeZone-error" hidden></p>
+        </div>
+      </div>
+      <div class="field">
+        <label for="accentColor">School accent color</label>
+        <div class="color-row"><input id="accentColor" name="accentColor" type="color" aria-describedby="accentColor-value accentColor-error"><output id="accentColor-value" for="accentColor"></output><span class="help">Used for the Home pane.</span></div>
+        <p class="error" id="accentColor-error" hidden></p>
+      </div>
+      <div class="pair">
+        <div class="field">
+          <label for="schoolLogo">School logo</label>
+          <input id="schoolLogo" name="schoolLogo" type="text" placeholder="images/school-logo.png" spellcheck="false" aria-describedby="schoolLogo-help image-note schoolLogo-error">
+          <p class="help" id="schoolLogo-help">Use a small, optimized image. Transparent-background PNG is recommended.</p>
+          <p class="error" id="schoolLogo-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="backgroundImage">Background image</label>
+          <input id="backgroundImage" name="backgroundImage" type="text" placeholder="images/background.jpg" spellcheck="false" aria-describedby="backgroundImage-help image-note backgroundImage-error">
+          <p class="help" id="backgroundImage-help">Optional. Use an optimized image sized close to your display resolution.</p>
+          <p class="error" id="backgroundImage-error" hidden></p>
+        </div>
+      </div>
+      <p class="notice" id="image-note">Image paths are saved in the generated text for a future screen layout; the athletics panes do not display them yet. Files must already be installed in the module folder. Nothing is uploaded or copied.</p>
+      <fieldset>
+        <legend>Top of your display</legend>
+        <div class="choices">
+          <label><input id="showDateTime" type="checkbox"> Show date/time</label>
+          <label><input id="showSchoolName" type="checkbox"> Show school name</label>
+          <label><input id="showWeather" type="checkbox"> Show weather</label>
+        </div>
+        <p class="help">These choices generate reminders for separate MagicMirror modules. Weather needs your own provider settings.</p>
+      </fieldset>
+      <p class="error" id="form-error" hidden></p>
+    </form>
+    <section class="generated" aria-labelledby="generated-title">
+      <h2 id="generated-title">Generated configuration</h2>
+      <p id="output-help">Copy this entry into the <code>modules</code> array in MagicMirror's <code>config.js</code>. Add a comma between neighboring entries.</p>
+      <label class="sr-only" for="generated-config">Generated MagicMirror configuration</label>
+      <textarea id="generated-config" readonly spellcheck="false" rows="15" aria-describedby="output-help" placeholder="Enter an Arbiter calendar URL to generate your configuration."></textarea>
+      <div class="copy-row"><button id="copy-config" type="button" disabled>Copy configuration</button><span id="copy-status" role="status" aria-live="polite"></span></div>
+      <ul id="companion-notes" class="help"></ul>
+    </section>
+    <section id="display-preview" aria-labelledby="preview-title">
+      <h2 id="preview-title">Display Preview</h2>
+      <p class="help">Mock games, time, and weather only. This is a layout approximation, not a live MagicMirror screen. Local images are loaded from the module folder.</p>
+      <fieldset id="preview-controls">
+        <legend>Preview settings</legend>
+        <div class="pair">
+          <div class="field"><label for="preview-resolution">Resolution preset</label><select id="preview-resolution"></select></div>
+          <div class="field"><label for="preview-data">Preview data</label><select id="preview-data"><option value="typical">Typical</option><option value="long">Long names</option><option value="maximum">Maximum games</option></select></div>
+        </div>
+        <div id="preview-custom" class="pair" hidden>
+          <div class="field"><label for="preview-width">Custom width</label><input id="preview-width" type="number" min="320" max="7680" step="1" aria-describedby="preview-error"></div>
+          <div class="field"><label for="preview-height">Custom height</label><input id="preview-height" type="number" min="320" max="7680" step="1" aria-describedby="preview-error"></div>
+        </div>
+        <label class="preview-safe-label"><input id="preview-safe" type="checkbox"> Show safe area</label>
+        <p class="help">The dashed overlay marks a 4% inset; it does not change the layout.</p>
+      </fieldset>
+      <p id="preview-error" class="error" role="alert" hidden></p>
+      <p id="preview-size" class="help"></p>
+      <div id="display-host"><div id="display-stage"><iframe id="display-frame" title="Mock school athletics display"></iframe></div></div>
+      <p id="preview-status" role="status" aria-live="polite">Checking layout…</p>
+      <p id="preview-images" class="error" role="status"></p>
+    </section>
+    <footer>Works offline. Your entries stay on this page until you close or reload it. No configuration is saved automatically.</footer>
+  </main>
+</body>
+</html>

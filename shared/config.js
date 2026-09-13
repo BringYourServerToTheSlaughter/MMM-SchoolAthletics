@@ -18,6 +18,8 @@
       calendarUrl: string("", "Arbiter HTTPS iCalendar subscription URL. Required.", { format: "uri" }),
       arbiterSchoolId: string("", "Numeric school ID from /School/<id>. If omitted, automatic logo discovery is skipped."),
       schoolName: string("", "Optional school name for future setup tools; the module does not render a school header."),
+      schoolLogo: string("", "Optional module-relative school-logo path, reserved for future screen layout. The athletics panes do not render it."),
+      backgroundImage: string("", "Optional module-relative background-image path, reserved for future screen layout. The athletics panes do not render it."),
       timeZone: string("", "School IANA timezone. Empty uses the display system timezone; also interprets floating event times."),
       locale: string("en-US", "Locale for dates and times. Interface labels are currently English."),
       timeFormat: string("12h", "Time display format.", { enum: ["12h", "24h"] }),
@@ -86,6 +88,16 @@
     }
     return url;
   }
+  function relativeImagePath(value) {
+    if (typeof value !== "string") throw new Error("Use a relative image path, such as images/school-logo.png.");
+    value = value.trim();
+    if (!value) return "";
+    if (value.length > 2048 || !/^[A-Za-z0-9_-][A-Za-z0-9_./ -]*$/.test(value) ||
+        value.split("/").some(part => !part || part === "." || part === "..") || !/\.(png|jpe?g|webp|gif|svg)$/i.test(value)) {
+      throw new Error("Use a relative image path, such as images/school-logo.png.");
+    }
+    return value;
+  }
   function imageUrl(value) {
     if (!value) return "";
     if (/^[A-Za-z0-9_-][A-Za-z0-9_./ -]*$/.test(value) && !value.includes("..")) value = `/modules/MMM-SchoolAthletics/${value}`;
@@ -105,9 +117,11 @@
     try { new Intl.DateTimeFormat(config.locale, { timeZone: config.timeZone }).format(); }
     catch { throw new Error("locale or timeZone is invalid; use a valid locale and IANA timezone."); }
     if (config.arbiterSchoolId && !/^\d{1,20}$/.test(config.arbiterSchoolId)) throw new Error("arbiterSchoolId must be a numeric string.");
+    config.schoolLogo = relativeImagePath(config.schoolLogo);
+    config.backgroundImage = relativeImagePath(config.backgroundImage);
     config.logos.fallbackImage = imageUrl(config.logos.fallbackImage);
     config.logos.overrides = config.logos.overrides.map(entry => ({ ...entry, image: imageUrl(entry.image) }));
     return config;
   }
-  return { schema, defaults, normalize, arbiterUrl, imageUrl };
+  return { schema, defaults, normalize, arbiterUrl, imageUrl, relativeImagePath };
 });

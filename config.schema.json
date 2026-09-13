@@ -20,6 +20,16 @@
       "default": "",
       "description": "Optional school name for future setup tools; the module does not render a school header."
     },
+    "schoolLogo": {
+      "type": "string",
+      "default": "",
+      "description": "Optional module-relative school-logo path, reserved for future screen layout. The athletics panes do not render it."
+    },
+    "backgroundImage": {
+      "type": "string",
+      "default": "",
+      "description": "Optional module-relative background-image path, reserved for future screen layout. The athletics panes do not render it."
+    },
     "timeZone": {
       "type": "string",
       "default": "",

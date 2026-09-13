@@ -1,6 +1,6 @@
 # MMM-SchoolAthletics
 
-MagicMirror² athletics schedules in two Home/Away panes. Stage 2A core; no setup UI, header/weather modules, or screen-preview tool.
+MagicMirror² athletics schedules in two Home/Away panes. Stage 2A core with a Stage 2B local config generator; no header/weather modules or screen-preview tool.
 
 Install this directory under `MagicMirror/modules/MMM-SchoolAthletics`, use Node.js 22 or later (also meeting your MagicMirror version's requirements), and run `npm ci` here. Configure through MagicMirror's `config.js`:
 
@@ -43,3 +43,5 @@ Logo priority: manual override, valid local cache, optional discovery, fallback/
 Automatic cache files are in `public/logos/v2/`, with metadata in `.cache/logos.json`. Positive and negative entries expire, repeated lookups reuse work, invalid files are removed, and managed images are evicted to meet the shared byte budget. Legacy files directly under `public/logos/` are not imported or removed. The smallest configured budget applies until helper restart; temporary downloads can exceed the budget until cleanup. Manual images are outside this cache.
 
 Run `npm run check` and `npm test` for local validation. The current node-ical parser and Arbiter HTML discovery approach are retained. Live feed/target-device verification and source provenance/license review remain necessary before release. See `THIRD_PARTY_NOTICES.md`; no project license has been selected.
+
+Open `setup/index.html` directly in a browser for the offline, one-page config generator. It generates text to copy; it never edits `config.js`, uploads images, or saves your entries. Top-band choices produce companion-module reminders. Optional `schoolLogo` and `backgroundImage` relative paths are reserved for future screen layout and are not rendered by the athletics panes.

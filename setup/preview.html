@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Mock athletics display</title>
+  <link rel="stylesheet" href="preview.css">
+  <script defer src="../shared/config.js"></script>
+  <script defer src="preview-model.js"></script>
+  <script defer src="preview-frame.js"></script>
+</head>
+<body>
+  <img id="background" alt="" hidden>
+  <main id="display">
+    <header id="top-band">
+      <div class="header-slot" id="clock-slot"><div id="clock"><strong>3:45 PM</strong><span>Saturday, September 12</span></div></div>
+      <div class="header-slot" id="school-slot"><div id="school"><img id="school-logo" alt="School logo" hidden><strong id="school-name"></strong></div></div>
+      <div class="header-slot" id="weather-slot"><div id="weather"><strong>72° · Sunny</strong><span>High 76° / Low 54°</span></div></div>
+    </header>
+    <div id="panes">
+      <section class="pane home"><h2>HOME GAMES</h2><p class="date">Saturday, September 12</p><div class="games" id="home-games"></div></section>
+      <section class="pane away"><h2>AWAY GAMES</h2><p class="date">Saturday, September 12</p><div class="games" id="away-games"></div></section>
+    </div>
+  </main>
+  <div id="safe-area" hidden aria-hidden="true"></div>
+</body>
+</html>
