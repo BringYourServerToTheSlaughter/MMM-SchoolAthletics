@@ -53,3 +53,11 @@ test("overflow measurements detect header, vertical pane, and clipped row bounds
   assert.equal(preview.overflows([{ bounds:{...limit,bottom:120}, limit }]), true);
   assert.equal(preview.overflows([{ bounds:{...limit,bottom:100.5}, limit }]), false);
 });
+
+ test("school logo belongs to Home heading rather than the school-name band", () => {
+  const html = require("node:fs").readFileSync("setup/preview.html", "utf8");
+  assert.match(html, /<section class="pane home"><h2><img id="school-logo"[^>]*><span>HOME GAMES<\/span><\/h2>/);
+  assert.match(html, /<div id="school"><strong id="school-name"><\/strong><\/div>/);
+  assert.match(html, /<section class="pane away"><h2>AWAY GAMES<\/h2>/);
+  assert.equal((html.match(/id="school-logo"/g) || []).length, 1);
+});

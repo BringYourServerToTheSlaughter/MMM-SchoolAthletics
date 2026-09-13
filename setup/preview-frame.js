@@ -40,7 +40,7 @@
     byId("school-name").textContent = current.schoolName;
     byId("safe-area").hidden = !current.safeArea;
     image("background", current.backgroundImage);
-    image("school-logo", current.showSchoolName ? current.schoolLogo : "");
+    image("school-logo", current.schoolLogo);
     for (const kind of ["home", "away"]) {
       const list = byId(`${kind}-games`);
       list.className = `games ${current.mode}`;

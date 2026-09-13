@@ -71,7 +71,7 @@ test('preview frame renders uploaded logo and background from existing state fie
  const node=id=>{if(!nodes.has(id))nodes.set(id,{hidden:true,style:{setProperty(){}},removeAttribute(key){delete this[key];},replaceChildren(){},append(){},clientWidth:100,clientHeight:100});return nodes.get(id);};
  const parent={postMessage(){}};
  vm.runInNewContext(fs.readFileSync('setup/preview-frame.js','utf8'),{SchoolAthleticsConfig:shared,SchoolAthleticsPreview:preview,parent,URL,location:{href:'http://127.0.0.1:8081/setup/preview.html',origin:'http://127.0.0.1:8081'},requestAnimationFrame(){},window:{addEventListener(type,fn){if(type==='message')listener=fn;}},document:{getElementById:node,documentElement:node('root'),querySelectorAll(){return [];},createElement(){return {append(){}};}}});
- listener({source:parent,origin:'http://127.0.0.1:8081',data:{type:'school-preview-render',revision:1,state:preview.state({schoolLogo:'images/uploads/logo.png',backgroundImage:'images/uploads/background.webp',showSchoolName:true},{preset:'1920x1080',mode:'typical'})}});
+ listener({source:parent,origin:'http://127.0.0.1:8081',data:{type:'school-preview-render',revision:1,state:preview.state({schoolLogo:'images/uploads/logo.png',backgroundImage:'images/uploads/background.webp',showSchoolName:false},{preset:'1920x1080',mode:'typical'})}});
  for(const [id,path] of [['school-logo','logo.png'],['background','background.webp']]){assert.equal(node(id).src,'http://127.0.0.1:8081/images/uploads/'+path);node(id).onload();assert.equal(node(id).hidden,false);}
 });
 

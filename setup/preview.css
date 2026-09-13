@@ -12,7 +12,8 @@ body { margin: 0; width: 100vw; height: 100vh; overflow: hidden; }
 #clock span, #weather span { font-size: calc(var(--unit) * 1.2); }
 #school { display: flex; align-items: center; justify-content: center; gap: 1vw; text-align: center; }
 #school-name { min-width: 0; overflow-wrap: anywhere; font-size: calc(var(--unit) * 2.5); }
-#school-logo { width: 5vw; height: 8vh; object-fit: contain; flex: 0 0 auto; }
+.pane.home h2 { display: flex; align-items: center; justify-content: center; gap: .45em; }
+#school-logo { width: 1.5em; height: 1.2em; object-fit: contain; flex: 0 0 auto; }
 #panes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2vw; min-height: 0; }
 .pane { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; background: #08090bd9; border: calc(var(--unit) * .07) solid #ffffff50; border-top: calc(var(--unit) * .25) solid #bdbdbd; border-radius: calc(var(--unit) * .9); padding: 2vh 1.7vw; }
 .pane.home { border-top-color: var(--accent); }
