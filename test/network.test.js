@@ -4,6 +4,7 @@ const assert = require("node:assert/strict");
 const { EventEmitter } = require("node:events");
 const { Readable } = require("node:stream");
 const { Network, checkUrl } = require("../lib/network");
+const { version } = require("../package.json");
 function requestFixture(responses, seen = []) {
   return (url, options, callback) => {
     seen.push({ url: url.href, options });
@@ -79,4 +80,14 @@ test("DNS guard rejects private, loopback, link-local and mapped local addresses
   for (const address of ["127.0.0.1", "10.1.2.3", "172.16.1.1", "192.168.1.1", "169.254.169.254", "::1", "fe80::1", "fc00::1", "::ffff:127.0.0.1", "100.64.0.1"]) assert.equal(isPublicAddress(address), false, address);
   assert.equal(isPublicAddress("8.8.8.8"), true);
   assert.equal(isPublicAddress("2606:4700:4700::1111"), true);
+});
+
+test("default user-agent includes current package version", async () => {
+  const seen = [];
+  const network = new Network({ request: requestFixture([{ text: "ok" }], seen) });
+  await network.download("https://www.arbiterlive.com/test");
+  assert.equal(
+    seen[0].options.headers["User-Agent"],
+    `MagicMirror-SchoolAthletics/${version}`
+  );
 });

@@ -90,3 +90,14 @@ test("unknown games are hidden by default and never create a third group", () =>
   assert.deepEqual(Object.keys(data).sort(), ["away", "date", "home"]);
   assert.equal(data.home.today.length + data.away.today.length, 0);
 });
+
+test("cancelled games recognize both STATUS variations and inline summary markers", () => {
+  const data = parseSchedule(feed(
+    event("c1", "DTSTART:20260912T180000Z\r\nSTATUS:CANCELED\r\nSUMMARY:Baseball vs North HS"),
+    event("c2", "DTSTART:20260912T190000Z\r\nSUMMARY:Softball vs South HS (Canceled)")
+  ), config({ showCancelled: true }), now);
+
+  assert.equal(data.home.today.length, 2);
+  assert.equal(data.home.today[0].cancelled, true);
+  assert.equal(data.home.today[1].cancelled, true);
+});

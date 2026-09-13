@@ -18,7 +18,7 @@
     "schoolName": {
       "type": "string",
       "default": "",
-      "description": "Optional school name for future setup tools; the module does not render a school header."
+      "description": "Optional school name used by the setup preview simulator; the athletics module does not render a school header."
     },
     "schoolLogo": {
       "type": "string",

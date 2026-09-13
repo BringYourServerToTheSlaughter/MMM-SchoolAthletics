@@ -22,10 +22,10 @@ From the parent `modules` directory:
 
 ```sh
 cd MMM-SchoolAthletics
-python3 -m http.server 8080
+node setup/server.js
 ```
 
-Open [the setup page](http://localhost:8080/setup/). Stop the server with Ctrl+C when finished. Use this temporary server on a trusted local network; it serves the module directory.
+Open [the setup page](http://127.0.0.1:8081/setup/). Stop the helper with Ctrl+C when finished. The helper listens on loopback and provides the full setup workflow without conflicting with MagicMirror's default port 8080.
 
 Supply your **Arbiter iCal/calendar subscription URL** in the required `calendarUrl` field. This HTTPS URL supplies schedule data; an HTML school/team page is not a calendar feed. The optional `arbiterSchoolId` only assists automatic opponent-logo discovery. Schedules and manual logos work without it.
 

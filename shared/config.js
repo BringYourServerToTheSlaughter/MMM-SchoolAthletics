@@ -17,7 +17,7 @@
     ...object({
       calendarUrl: string("", "Arbiter HTTPS iCalendar subscription URL. Required.", { format: "uri" }),
       arbiterSchoolId: string("", "Numeric school ID from /School/<id>. If omitted, automatic logo discovery is skipped."),
-      schoolName: string("", "Optional school name for future setup tools; the module does not render a school header."),
+      schoolName: string("", "Optional school name used by the setup preview simulator; the athletics module does not render a school header."),
       schoolLogo: string("", "Optional module-relative school-logo path, reserved for future screen layout. The athletics panes do not render it."),
       backgroundImage: string("", "Optional module-relative background-image path, reserved for future screen layout. The athletics panes do not render it."),
       timeZone: string("", "School IANA timezone. Empty uses the display system timezone; also interprets floating event times."),
