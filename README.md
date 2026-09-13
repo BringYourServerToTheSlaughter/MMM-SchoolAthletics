@@ -2,6 +2,12 @@
 
 Display school athletics schedules in Home and Away panes on MagicMirror², with optional opponent logos. Includes a local configuration generator and mock display preview. This project is not affiliated with or endorsed by ArbiterSports.
 
+## Preview
+
+![MMM-SchoolAthletics displaying home and away school athletics schedules](docs/assets/mmm-schoolathletics-preview.png)
+
+*Example school athletics display with current and upcoming home and away events.*
+
 ## Install
 
 Requires an existing MagicMirror² installation and Node.js 22 or later, also meeting your MagicMirror² version's requirements. Python 3 is needed only for the setup-page server.
