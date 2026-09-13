@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self'; frame-src 'self'; base-uri 'none'; form-action 'none'">
   <title>MMM-SchoolAthletics Setup</title>
   <link rel="stylesheet" href="setup.css">
   <script defer src="../shared/config.js"></script>
@@ -126,7 +126,10 @@
       <p id="preview-status" role="status" aria-live="polite">Checking layout…</p>
       <p id="preview-images" class="error" role="status"></p>
     </section>
-    <footer>Works offline. Your entries stay on this page until you close or reload it. Configuration is written only when you click Apply to MagicMirror using the local helper.</footer>
+    <footer>
+      <p class="setup-footer-note">Works offline. Your entries stay on this page until you close or reload it. Configuration is written only when you click Apply to MagicMirror using the local helper.</p>
+      <p class="setup-attribution"><span>Built by</span><img src="assets/pingstate.png" alt="PingState" width="927" height="213"></p>
+    </footer>
   </main>
 </body>
 </html>
