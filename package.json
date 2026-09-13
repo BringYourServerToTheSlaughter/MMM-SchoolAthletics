@@ -1,6 +1,6 @@
 {
   "name": "mmm-schoolathletics",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "MagicMirror module for school athletics schedules and opponent logos",
   "engines": {
