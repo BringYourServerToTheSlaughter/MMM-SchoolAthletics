@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MMM-SchoolAthletics configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "calendarUrl": {
+      "type": "string",
+      "default": "",
+      "description": "Arbiter HTTPS iCalendar subscription URL. Required.",
+      "format": "uri"
+    },
+    "arbiterSchoolId": {
+      "type": "string",
+      "default": "",
+      "description": "Numeric school ID from /School/<id>. If omitted, automatic logo discovery is skipped."
+    },
+    "schoolName": {
+      "type": "string",
+      "default": "",
+      "description": "Optional school name for future setup tools; the module does not render a school header."
+    },
+    "timeZone": {
+      "type": "string",
+      "default": "",
+      "description": "School IANA timezone. Empty uses the display system timezone; also interprets floating event times."
+    },
+    "locale": {
+      "type": "string",
+      "default": "en-US",
+      "description": "Locale for dates and times. Interface labels are currently English."
+    },
+    "timeFormat": {
+      "type": "string",
+      "default": "12h",
+      "description": "Time display format.",
+      "enum": [
+        "12h",
+        "24h"
+      ]
+    },
+    "refreshInterval": {
+      "type": "integer",
+      "default": 1800000,
+      "minimum": 900000,
+      "maximum": 86400000,
+      "description": "Calendar refresh interval in milliseconds; values below 15 minutes are clamped to 15 minutes."
+    },
+    "upcomingCount": {
+      "type": "integer",
+      "default": 4,
+      "minimum": 0,
+      "maximum": 50,
+      "description": "Upcoming games per category; zero hides upcoming games."
+    },
+    "lookAheadDays": {
+      "type": "integer",
+      "default": 90,
+      "minimum": 1,
+      "maximum": 366,
+      "description": "Number of calendar days to search for upcoming games."
+    },
+    "homeKeywords": {
+      "type": "array",
+      "default": [],
+      "maxItems": 100,
+      "description": "Home venue names/aliases used when the title has no home/away marker.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      }
+    },
+    "unknownGamePolicy": {
+      "type": "string",
+      "default": "hide",
+      "description": "How to handle games without a recognized title marker or home venue.",
+      "enum": [
+        "hide",
+        "home",
+        "away"
+      ]
+    },
+    "showCancelled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Display cancelled games with a cancellation label."
+    },
+    "showLastUpdated": {
+      "type": "boolean",
+      "default": false,
+      "description": "Show the time the calendar was last successfully checked."
+    },
+    "layout": {
+      "type": "string",
+      "default": "auto",
+      "description": "Automatically fit panes, force columns, or stack vertically.",
+      "enum": [
+        "auto",
+        "columns",
+        "stacked"
+      ]
+    },
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "homeAccent": {
+          "type": "string",
+          "default": "#ffffff",
+          "description": "Home pane accent color.",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "awayAccent": {
+          "type": "string",
+          "default": "#bdbdbd",
+          "description": "Away pane accent color.",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        }
+      }
+    },
+    "logos": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show opponent logos for today's games."
+        },
+        "autoDiscover": {
+          "type": "boolean",
+          "default": true,
+          "description": "Discover opponent logos on Arbiter when arbiterSchoolId is supplied."
+        },
+        "fallbackImage": {
+          "type": "string",
+          "default": "",
+          "description": "Use small, optimized images. Transparent-background PNG is recommended for logos. Use a module-relative path, a trusted /modules/... path, or an HTTPS URL."
+        },
+        "overrides": {
+          "type": "array",
+          "default": [],
+          "maxItems": 200,
+          "description": "Manual opponent logos take priority over automatic discovery.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "opponent": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "image": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048,
+                "description": "Use small, optimized images. Transparent-background PNG is recommended for logos. Use a module-relative path, a trusted /modules/... path, or an HTTPS URL."
+              }
+            },
+            "required": [
+              "opponent",
+              "image"
+            ]
+          }
+        },
+        "cache": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "maxAge": {
+              "type": "integer",
+              "default": 2592000000,
+              "minimum": 3600000,
+              "maximum": 31536000000,
+              "description": "Successful logo cache lifetime in milliseconds."
+            },
+            "negativeMaxAge": {
+              "type": "integer",
+              "default": 86400000,
+              "minimum": 60000,
+              "maximum": 604800000,
+              "description": "Retry delay for missing or failed logos, in milliseconds."
+            },
+            "maxBytes": {
+              "type": "integer",
+              "default": 52428800,
+              "minimum": 1048576,
+              "maximum": 209715200,
+              "description": "Shared automatic-logo cache budget in bytes. The smallest active instance budget wins."
+            }
+          }
+        }
+      }
+    }
+  }
+}

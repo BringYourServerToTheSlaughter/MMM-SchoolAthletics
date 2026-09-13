@@ -1,0 +1,337 @@
+/* Module styles; accent colors come from validated per-instance configuration. */
+.MMM-SchoolAthletics {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+.MMM-SchoolAthletics .module-content {
+	width: 100%;
+	height: 100%;
+}
+
+.MMM-SchoolAthletics .school-athletics-wrapper {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: clamp(18px, 1.6vw, 32px);
+	width: 100%;
+	height: 100%;
+}
+
+.MMM-SchoolAthletics .school-athletics-pane {
+	container-type: inline-size;
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	min-width: 0;
+	height: 100%;
+	padding: clamp(17px, 1.35vw, 26px);
+	overflow: auto;
+	background: rgba(5, 5, 8, 0.70);
+	border: 1px solid rgba(255, 255, 255, 0.22);
+	border-top: 4px solid var(--school-home-accent, #ffffff);
+	border-radius: 18px;
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.38);
+	backdrop-filter: blur(5px);
+}
+
+.MMM-SchoolAthletics .school-athletics-away {
+	border-top-color: var(--school-away-accent, #bdbdbd);
+}
+
+.MMM-SchoolAthletics .school-athletics-pane-header {
+	flex: 0 0 auto;
+	padding-bottom: 10px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+	text-align: center;
+}
+
+.MMM-SchoolAthletics .school-athletics-pane-header h2 {
+	margin: 0;
+	color: #fff;
+	font-size: clamp(27px, 2vw, 39px);
+	font-weight: 800;
+	letter-spacing: 0.075em;
+	line-height: 1;
+}
+
+.MMM-SchoolAthletics .school-athletics-today-date {
+	margin-top: 7px;
+	color: #c9c9c9;
+	font-size: clamp(15px, 1vw, 20px);
+	font-weight: 500;
+	letter-spacing: 0.03em;
+}
+
+.MMM-SchoolAthletics .school-athletics-today-list {
+	display: flex;
+	flex: 1 0 auto;
+	flex-direction: column;
+	justify-content: center;
+	min-height: 0;
+	padding: 8px 0;
+}
+
+.MMM-SchoolAthletics .school-athletics-game {
+	display: grid;
+	grid-template-columns: max-content minmax(0, 1fr) auto;
+	align-items: center;
+	gap: clamp(12px, 1.1vw, 22px);
+	padding: clamp(10px, 1.1vh, 16px) 4px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.MMM-SchoolAthletics .school-athletics-game:last-child {
+	border-bottom: 0;
+}
+
+.MMM-SchoolAthletics .school-athletics-game-time {
+	color: #fff;
+	font-size: clamp(28px, 2.2vw, 43px);
+	font-weight: 300;
+	line-height: 1;
+	text-align: right;
+	white-space: nowrap;
+}
+
+.MMM-SchoolAthletics .school-athletics-game-details {
+	min-width: 0;
+	text-align: left;
+}
+
+.MMM-SchoolAthletics .school-athletics-game-logo {
+	width: clamp(48px, 4.2vw, 70px);
+	height: clamp(48px, 4.2vw, 70px);
+	object-fit: contain;
+	align-self: center;
+	justify-self: end;
+}
+
+.MMM-SchoolAthletics .school-athletics-game-team {
+	overflow: hidden;
+	color: #fff;
+	font-size: clamp(27px, 2vw, 39px);
+	font-weight: 750;
+	line-height: 1.05;
+	text-overflow: ellipsis;
+}
+
+.MMM-SchoolAthletics .school-athletics-game-opponent {
+	margin-top: 5px;
+	overflow: hidden;
+	color: #cfcfcf;
+	font-size: clamp(19px, 1.35vw, 27px);
+	font-weight: 450;
+	line-height: 1.1;
+	text-overflow: ellipsis;
+}
+
+.MMM-SchoolAthletics .density-feature .school-athletics-game {
+	grid-template-columns: max-content minmax(0, 1fr) auto;
+	padding: 22px 6px;
+}
+
+.MMM-SchoolAthletics .density-feature .school-athletics-game-time {
+	font-size: clamp(40px, 3.3vw, 63px);
+}
+
+.MMM-SchoolAthletics .density-feature .school-athletics-game-team {
+	font-size: clamp(38px, 3vw, 57px);
+}
+
+.MMM-SchoolAthletics .density-feature .school-athletics-game-opponent {
+	font-size: clamp(24px, 1.8vw, 34px);
+}
+
+.MMM-SchoolAthletics .density-compact .school-athletics-game {
+	padding-top: 6px;
+	padding-bottom: 6px;
+	grid-template-columns: max-content minmax(0, 1fr) auto;
+	gap: 10px;
+}
+
+.MMM-SchoolAthletics .density-compact .school-athletics-game-time {
+	font-size: clamp(24px, 1.75vw, 34px);
+}
+
+.MMM-SchoolAthletics .density-compact .school-athletics-game-team {
+	font-size: clamp(23px, 1.65vw, 32px);
+}
+
+.MMM-SchoolAthletics .density-compact .school-athletics-game-opponent {
+	font-size: clamp(17px, 1.15vw, 22px);
+}
+
+.MMM-SchoolAthletics .density-dense .school-athletics-game {
+	padding-top: 1px;
+	padding-bottom: 1px;
+	grid-template-columns: max-content minmax(0, 1fr) auto;
+	gap: 7px;
+}
+
+.MMM-SchoolAthletics .density-dense .school-athletics-game-time, .MMM-SchoolAthletics .density-dense .school-athletics-game-team {
+	font-size: clamp(18px, 1.25vw, 24px);
+}
+
+.MMM-SchoolAthletics .density-dense .school-athletics-game-opponent {
+	font-size: clamp(14px, 0.92vw, 18px);
+	margin-top: 1px;
+	line-height: 1;
+}
+
+.MMM-SchoolAthletics .school-athletics-empty {
+	padding: 30px 10px;
+	color: rgba(255, 255, 255, 0.88);
+	font-size: clamp(30px, 2.5vw, 48px);
+	font-weight: 700;
+	letter-spacing: 0.045em;
+	line-height: 1.15;
+	text-align: center;
+}
+
+.MMM-SchoolAthletics .school-athletics-upcoming {
+	flex: 0 0 auto;
+	padding-top: 9px;
+	border-top: 2px solid var(--school-home-accent, #ffffff);
+}
+
+.MMM-SchoolAthletics .school-athletics-away .school-athletics-upcoming {
+	border-top-color: var(--school-away-accent, #bdbdbd);
+}
+
+.MMM-SchoolAthletics .school-athletics-upcoming h3 {
+	margin: 0 0 5px;
+	color: #fff;
+	font-size: clamp(14px, 0.95vw, 18px);
+	font-weight: 700;
+	letter-spacing: 0.08em;
+}
+
+.MMM-SchoolAthletics .school-athletics-upcoming-row {
+	display: grid;
+	grid-template-columns: max-content minmax(0, 1fr);
+	gap: 10px;
+	padding: 3px 0;
+	font-size: clamp(13px, 0.9vw, 17px);
+	line-height: 1.15;
+}
+
+.MMM-SchoolAthletics .school-athletics-upcoming-when {
+	color: #bdbdbd;
+	white-space: nowrap;
+}
+
+.MMM-SchoolAthletics .school-athletics-upcoming-name {
+	overflow: hidden;
+	color: #e7e7e7;
+	font-weight: 600;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.MMM-SchoolAthletics .school-athletics-game.cancelled {
+	opacity: 0.72;
+}
+
+.MMM-SchoolAthletics .school-athletics-game.cancelled .school-athletics-game-team, .MMM-SchoolAthletics .school-athletics-game.cancelled .school-athletics-game-opponent {
+	text-decoration: line-through;
+}
+
+.MMM-SchoolAthletics .school-athletics-cancelled-label {
+	display: inline-block;
+	margin-top: 6px;
+	padding: 2px 8px;
+	color: #fff;
+	background: #a81836;
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 800;
+	letter-spacing: 0.06em;
+}
+
+.MMM-SchoolAthletics .school-athletics-message {
+	grid-column: 1 / -1;
+	align-self: center;
+	padding: 40px;
+	color: #fff;
+	font-size: 34px;
+	text-align: center;
+}
+
+.MMM-SchoolAthletics .school-athletics-message.error {
+	color: #ffb1b1;
+	padding: 12px;
+	font-size: 18px;
+}
+
+.MMM-SchoolAthletics .school-athletics-updated {
+	margin-top: 4px;
+	color: #888;
+	font-size: 12px;
+	text-align: right;
+}
+
+.MMM-SchoolAthletics .density-compact .school-athletics-today-list, .MMM-SchoolAthletics .density-dense .school-athletics-today-list {
+	justify-content: flex-start;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.MMM-SchoolAthletics .density-compact .school-athletics-upcoming, .MMM-SchoolAthletics .density-dense .school-athletics-upcoming {
+	margin-top: 8px;
+}
+
+.MMM-SchoolAthletics .density-compact .school-athletics-game-logo {
+	width: 42px;
+	height: 42px;
+}
+
+.MMM-SchoolAthletics .density-dense .school-athletics-game-logo {
+	width: 30px;
+	height: 30px;
+}
+
+.MMM-SchoolAthletics .density-dense .school-athletics-game:first-child {
+	margin-top: 2px;
+}
+
+.MMM-SchoolAthletics .density-dense .school-athletics-game:last-child {
+	margin-bottom: 2px;
+}
+
+.MMM-SchoolAthletics .density-dense .school-athletics-today-list {
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+.MMM-SchoolAthletics .density-dense .school-athletics-upcoming {
+	margin-top: 10px;
+}
+
+.MMM-SchoolAthletics .school-athletics-wrapper.layout-auto {
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+}
+
+.MMM-SchoolAthletics .school-athletics-wrapper.layout-stacked {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.MMM-SchoolAthletics .school-athletics-upcoming-row.cancelled {
+	opacity: 0.72;
+}
+
+/* Small MagicMirror regions need a row layout based on pane width, not screen width. */
+@container (max-width: 400px) {
+  .MMM-SchoolAthletics .school-athletics-pane .school-athletics-game {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+  }
+  .MMM-SchoolAthletics .school-athletics-pane .school-athletics-game-time {
+    grid-column: 1 / -1;
+    text-align: left;
+    font-size: 24px;
+  }
+  .MMM-SchoolAthletics .school-athletics-pane .school-athletics-game-team { font-size: 25px; }
+  .MMM-SchoolAthletics .school-athletics-pane .school-athletics-game-opponent { font-size: 18px; }
+  .MMM-SchoolAthletics .school-athletics-upcoming-row { grid-template-columns: minmax(0, 1fr); gap: 1px; }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "mmm-schoolathletics",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MagicMirror module for school athletics schedules and opponent logos",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check MMM-SchoolAthletics.js && node --check node_helper.js && node --check shared/config.js && node --check lib/calendar-worker.js && node --check lib/calendar.js && node --check lib/logos.js && node --check lib/network.js && node --check lib/parser.js && node --check lib/service.js"
+  },
+  "dependencies": {
+    "cheerio": "1.2.0",
+    "ipaddr.js": "2.3.0",
+    "node-ical": "0.27.1",
+    "sharp": "0.35.4"
+  },
+  "license": "UNLICENSED"
+}

@@ -1,0 +1,5 @@
+node_modules/
+public/logos/
+.cache/
+coverage/
+.DS_Store
