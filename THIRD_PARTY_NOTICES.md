@@ -32,6 +32,21 @@ documented module APIs, including `Module.register`, lifecycle hooks, socket
 notifications, and `NodeHelper.create`. MagicMirror source code is not vendored
 in this repository.
 
+## Bundled display fonts
+
+The following font files are bundled under `fonts/` for offline display use.
+They are not licensed under MMM-SchoolAthletics' MIT License.
+
+| Font | File | License | Official source |
+| --- | --- | --- | --- |
+| Montserrat | `montserrat-latin.woff2` | SIL Open Font License 1.1 | https://github.com/google/fonts/tree/main/ofl/montserrat |
+| Oswald | `oswald-latin.woff2` | SIL Open Font License 1.1 | https://github.com/google/fonts/tree/main/ofl/oswald |
+| Roboto Slab | `roboto-slab-latin.woff2` | Apache License 2.0 | https://github.com/google/fonts/tree/main/apache/robotoslab |
+| Merriweather | `merriweather-latin.woff2` | SIL Open Font License 1.1 | https://github.com/google/fonts/tree/main/ofl/merriweather |
+| Bebas Neue | `bebas-neue-latin.woff2` | SIL Open Font License 1.1 | https://github.com/google/fonts/tree/main/ofl/bebasneue |
+
+The complete accompanying license texts are in `fonts/licenses/`.
+
 ## ArbiterSports
 
 ArbiterSports is a separate service. MMM-SchoolAthletics is not affiliated with

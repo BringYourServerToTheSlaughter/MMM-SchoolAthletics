@@ -2,6 +2,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
+const path = require("node:path");
 const { normalize, defaults, schema, imageUrl } = require("../shared/config");
 const base = { calendarUrl: "https://www.arbiterlive.com/calendar/test.ics" };
 test("schema and shared defaults stay aligned and JSON-safe", () => {
@@ -32,4 +33,22 @@ test("Stage 2A defaults, refresh clamping, and missing optional identity", () =>
   assert.equal(normalize({ ...base, schoolName: "Example School" }).schoolName, "Example School");
   assert.throws(() => normalize({ ...base, unknownGamePolicy: "separate" }));
   assert.equal(imageUrl("logos/example.png"), "/modules/MMM-SchoolAthletics/logos/example.png");
+});
+test("display fonts use a small local allowlist and preserve the existing default", () => {
+  assert.equal(defaults().displayFont, "default");
+  for (const value of ["default", "arial", "verdana", "trebuchet", "georgia", "montserrat", "oswald", "robotoSlab", "merriweather", "bebasNeue"]) assert.equal(normalize({ ...base, displayFont: value }).displayFont, value);
+  assert.throws(() => normalize({ ...base, displayFont: "https://fonts.example/font" }));
+});
+test("bundled display fonts and their license texts are local and complete", () => {
+  const fonts = ["montserrat", "oswald", "roboto-slab", "merriweather", "bebas-neue"];
+  for (const name of fonts) {
+    const asset = path.join("fonts", `${name}-latin.woff2`);
+    assert.equal(fs.readFileSync(asset).subarray(0, 4).toString("ascii"), "wOF2", asset);
+  }
+  for (const license of ["Montserrat-OFL-1.1.txt", "Oswald-OFL-1.1.txt", "RobotoSlab-Apache-2.0.txt", "Merriweather-OFL-1.1.txt", "BebasNeue-OFL-1.1.txt"]) assert.ok(fs.readFileSync(path.join("fonts/licenses", license), "utf8").length > 1000, license);
+  const runtime = fs.readFileSync("MMM-SchoolAthletics.css", "utf8"), preview = fs.readFileSync("setup/preview.css", "utf8");
+  for (const name of fonts) {
+    assert.match(runtime, new RegExp(`fonts/${name}-latin\\.woff2`));
+    assert.match(preview, new RegExp(`fonts/${name}-latin\\.woff2`));
+  }
 });

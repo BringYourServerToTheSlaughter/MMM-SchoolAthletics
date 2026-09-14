@@ -34,6 +34,7 @@
     current = event.data.state;
     revision = event.data.revision;
     document.documentElement.style.setProperty("--accent", current.accentColor);
+    document.documentElement.style.setProperty("--display-font", SchoolAthleticsConfig.displayFontFamily(current.displayFont) || "Arial, sans-serif");
     byId("clock").hidden = !current.showDateTime;
     byId("school").hidden = !current.showSchoolName;
     byId("weather").hidden = !current.showWeather;

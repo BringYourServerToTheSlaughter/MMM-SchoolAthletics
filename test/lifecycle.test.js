@@ -8,7 +8,7 @@ const path = require("node:path");
 const config = { calendarUrl: "https://www.arbiterlive.com/calendar", timeZone: "UTC" };
 function schedule() { return { date: "2026-09-12", home: { today: [{ id: "a", team: "Soccer", opponent: "East HS", start: "2026-09-12T18:00:00Z", date: "2026-09-12", kind: "home", cancelled: true }], upcoming: [] }, away: { today: [], upcoming: [] }, unknown: { today: [{ id: "b", team: "Meet", start: "2026-09-12T20:00:00Z", date: "2026-09-12", kind: "unknown" }], upcoming: [] } }; }
 function element(tag) {
-  return { tag, children: [], style: { setProperty() {} }, _text: "", className: "", appendChild(child) { this.children.push(child); }, addEventListener() {}, remove() {},
+  return { tag, children: [], style: { setProperty() {} }, _text: "", className: "", appendChild(child) { this.children.push(child); }, addEventListener() {}, remove() {}, setAttribute() {},
     set textContent(value) { this._text = value; }, get textContent() { return this._text + this.children.map(c => c.textContent).join(" "); }
   };
 }
@@ -16,13 +16,14 @@ function frontend(extra = {}) {
   let definition;
   const timers = new Map();
   let id = 0;
-  const context = vm.createContext({ URL, Intl, Date, console, document: { createElement: element }, Module: { register(name, value) { assert.equal(name, "MMM-SchoolAthletics"); definition = value; } }, setInterval: fn => { timers.set(++id, fn); return id; }, clearInterval: id => timers.delete(id), setTimeout: fn => { timers.set(++id, fn); return id; }, clearTimeout: id => timers.delete(id) });
+  const body = { style: {} };
+  const context = vm.createContext({ URL, Intl, Date, console, document: { createElement: element, body }, Module: { register(name, value) { assert.equal(name, "MMM-SchoolAthletics"); definition = value; } }, setInterval: fn => { timers.set(++id, fn); return id; }, clearInterval: id => timers.delete(id), setTimeout: fn => { timers.set(++id, fn); return id; }, clearTimeout: id => timers.delete(id) });
   vm.runInContext(fs.readFileSync("shared/config.js", "utf8"), context);
   vm.runInContext(fs.readFileSync("MMM-SchoolAthletics.js", "utf8"), context);
   const sent = [];
   const instance = Object.assign({}, definition, { config: { ...config, ...extra }, identifier: "one", updateDom() {}, sendSocketNotification(type, payload) { sent.push({ type, payload }); } });
   instance.start();
-  return { instance, timers, sent };
+  return { instance, timers, sent, body };
 }
 test("frontend keeps useful data on error and ignores older responses", () => {
   const { instance: front, sent } = frontend();
@@ -40,6 +41,35 @@ test("frontend keeps useful data on error and ignores older responses", () => {
   assert.match(front.getDom().textContent, /Soccer/);
   front.socketNotificationReceived("SCHOOL_ATHLETICS_LOGOS", { instanceId: "one", requestId: 1, logos: { a: "old.png" } });
   assert.equal(front.schedule.home.today[0].logoUrl, undefined);
+});
+test("runtime renders configured school title, board background, mascot, and display font only when supplied", () => {
+  const { instance, body } = frontend({ schoolName: "Example Academy", schoolLogo: "images/uploads/mascot.png", backgroundImage: "images/uploads/board.png", displayFont: "verdana" });
+  instance.file = value => `/modules/MMM-SchoolAthletics/${value}`;
+  instance.socketNotificationReceived("SCHOOL_ATHLETICS_EVENTS", { instanceId: "one", requestId: 1, data: schedule() });
+  const dom = instance.getDom();
+  const title = dom.children.find(child => child.className === "school-athletics-school-name");
+  const home = dom.children.find(child => child.className.includes("school-athletics-home"));
+  const away = dom.children.find(child => child.className.includes("school-athletics-away"));
+  const heading = home.children[0].children[0];
+  assert.equal(body.style.backgroundImage, 'url("/modules/MMM-SchoolAthletics/images/uploads/board.png")');
+  assert.deepEqual([body.style.backgroundSize, body.style.backgroundPosition, body.style.backgroundRepeat], ["cover", "center", "no-repeat"]);
+  assert.equal(title.textContent, "Example Academy");
+  assert.equal(heading.children[0].className, "school-athletics-school-logo");
+  assert.equal(heading.children[0].src, "/modules/MMM-SchoolAthletics/images/uploads/mascot.png");
+  assert.equal(home.children[0].children[0].children.some(child => child.className === "school-athletics-school-logo"), true);
+  assert.equal(away.children[0].children[0].children.some(child => child.className === "school-athletics-school-logo"), false);
+  assert.equal(body.style.fontFamily, "Verdana, sans-serif");
+  assert.match(dom.className, /has-school-name/);
+  const blank = frontend();
+  blank.instance.socketNotificationReceived("SCHOOL_ATHLETICS_EVENTS", { instanceId: "one", requestId: 1, data: schedule() });
+  assert.equal(blank.instance.getDom().children.some(child => child.className === "school-athletics-school-name"), false);
+  instance.config.backgroundImage = "";
+  instance.config.displayFont = "default";
+  instance.getDom();
+  assert.equal(body.style.backgroundImage, undefined);
+  assert.equal(body.style.fontFamily, undefined);
+  instance.suspend();
+  assert.equal(body.style.backgroundImage, undefined);
 });
 test("frontend validates before timers and prevents overlap; suspend invalidates replies", () => {
   const invalid = frontend({ refreshInterval: "fast" });
@@ -127,7 +157,8 @@ test("runtime defaults have no school identity, feed, images, aliases, or fixed 
   assert.deepEqual(defaults.homeKeywords, []);
   assert.deepEqual(defaults.theme, { homeAccent: "#ffffff", awayAccent: "#bdbdbd" });
   assert.equal(Object.hasOwn(defaults, "weather"), false);
-  assert.doesNotMatch(fs.readFileSync("MMM-SchoolAthletics.css", "utf8"), /url\s*\(/i);
+  const css = fs.readFileSync("MMM-SchoolAthletics.css", "utf8");
+  for (const [, asset] of css.matchAll(/url\(["']?([^"')]+)["']?\)/gi)) assert.match(asset, /^fonts\/[a-z-]+-latin\.woff2$/);
 });
 
 test("runtime does not import setup fixtures or use environment school fallbacks", () => {

@@ -58,6 +58,15 @@ test('upload endpoint enforces origin protections and returns a local asset path
  assert.equal((await request({origin:'https://example.org'})).status,403);
  const good=await request({origin:'http://127.0.0.1:8081'});assert.equal(good.status,200);assert.equal(good.result.path,'images/uploads/logo.png');
 });
+test('standalone setup redirects uploads only to a clearly installed MagicMirror module',async t=>{
+ const {Readable}=require('node:stream'),{createServer,uploadRoot}=require('../setup/server');const standalone=root(t),magic=root(t),target=path.join(magic,'config','config.js'),installed=path.join(magic,'modules','MMM-SchoolAthletics'),bytes=await image('png');
+ fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,'var config={modules:[]};');fs.mkdirSync(installed,{recursive:true});
+ assert.equal(uploadRoot(standalone,target),fs.realpathSync(installed));
+ assert.equal(uploadRoot(standalone,path.join(magic,'config','other.js')),standalone);
+ const server=createServer(standalone,target),req=Readable.from([bytes]);Object.assign(req,{url:'/api/upload',method:'POST',socket:{localPort:8081},headers:{host:'127.0.0.1:8081',origin:'http://127.0.0.1:8081','content-type':'image/png','x-image-name':'board.png','x-setup-upload':'1'}});
+ const response=await new Promise(resolve=>{let status;server.emit('request',req,{writeHead(n){status=n;},end(body){resolve({status,result:JSON.parse(body)});}});});
+ assert.equal(response.status,200);assert.equal(response.result.path,'images/uploads/board.png');assert.ok(fs.existsSync(path.join(installed,response.result.path)));assert.equal(fs.existsSync(path.join(standalone,response.result.path)),false);
+});
 
 test('bundled sample is a valid optional PNG and selection updates the existing path',async()=>{
  assert.equal((await sharp('images/sample-background.png').metadata()).format,'png');

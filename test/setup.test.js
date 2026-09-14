@@ -16,6 +16,7 @@ test("setup output is valid JavaScript and accepted by the runtime", () => {
   assert.equal(entry.position, "middle_center");
   assert.equal(shared.normalize(entry.config).schoolLogo, "images/school-logo.png");
   assert.equal(entry.config.theme.homeAccent, "#123456");
+  assert.equal(entry.config.displayFont, "default");
 });
 test("empty optional fields are omitted", () => {
   const { entry } = setup.generate(state({ schoolName: "   ", arbiterSchoolId: "", schoolLogo: "", backgroundImage: " " }));
@@ -42,6 +43,7 @@ test("setup schema and hidden advanced defaults match Stage 2A", () => {
   const initial = setup.initialState("America/Chicago");
   assert.equal(initial.accentColor, defaults.theme.homeAccent);
   assert.equal(initial.schoolLogo, defaults.schoolLogo);
+  assert.equal(initial.displayFont, "default");
   const normalized = shared.normalize(setup.generate(state()).entry.config);
   for (const key of ["refreshInterval", "upcomingCount", "showCancelled", "unknownGamePolicy", "lookAheadDays", "logos"]) assert.deepEqual(normalized[key], defaults[key]);
   assert.deepEqual(JSON.parse(fs.readFileSync("config.schema.json")), shared.schema);
@@ -69,12 +71,25 @@ test("setup assets are local and policy blocks network requests/form submission"
   const html = fs.readFileSync("setup/index.html", "utf8");
   assert.match(html, /connect-src 'none'/);
   assert.match(html, /form-action 'none'/);
-  for (const [, asset] of html.matchAll(/(?:src|href)="([^"]+)"/g)) {
+  for (const [, asset] of html.matchAll(/(?:src|href)="([^"]+)"/g).filter(([, asset]) => !/^https?:\/\//.test(asset))) {
     assert.ok(!/^(?:https?:)?\/\//.test(asset));
     assert.ok(fs.existsSync(path.resolve("setup", asset)));
   }
   assert.match(html, /id="generated-config" readonly/);
   assert.doesNotMatch(fs.readFileSync("setup/setup.js", "utf8"), /\bfetch\s*\(|XMLHttpRequest|localStorage|sessionStorage/);
+  assert.match(html, /Subscribing-to-iCal-Feed-Schools/);
+  assert.match(html, /entityId=12345/);
+  assert.match(html, /target="_blank" rel="noopener noreferrer"/);
+  assert.match(html, /<label for="displayFont">Display Font<\/label>/);
+});
+
+test("display font selection is generated as runtime configuration", () => {
+  for (const displayFont of ["georgia", "montserrat", "oswald", "robotoSlab", "merriweather", "bebasNeue"]) {
+    const result = setup.generate(state({ displayFont }));
+    assert.deepEqual(result.errors, {});
+    assert.equal(result.entry.config.displayFont, displayFont);
+    assert.ok(result.output.includes(`"displayFont": "${displayFont}"`));
+  }
 });
 
 function formHarness(clipboard) {

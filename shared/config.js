@@ -7,6 +7,18 @@
   "use strict";
   // Use small, optimized images. Transparent-background PNG is recommended for logos.
   const imageHelp = "Use small, optimized images. Transparent-background PNG is recommended for logos. Use a module-relative path, a trusted /modules/... path, or an HTTPS URL.";
+  const displayFonts = Object.freeze({
+    default: "",
+    arial: "Arial, sans-serif",
+    verdana: "Verdana, sans-serif",
+    trebuchet: "Trebuchet MS, sans-serif",
+    georgia: "Georgia, serif",
+    montserrat: '"MMM Montserrat", sans-serif',
+    oswald: '"MMM Oswald", sans-serif',
+    robotoSlab: '"MMM Roboto Slab", serif',
+    merriweather: '"MMM Merriweather", serif',
+    bebasNeue: '"MMM Bebas Neue", sans-serif'
+  });
   const string = (defaultValue, description, extra = {}) => ({ type: "string", default: defaultValue, description, ...extra });
   const integer = (value, minimum, maximum, description) => ({ type: "integer", default: value, minimum, maximum, description });
   const bool = (value, description) => ({ type: "boolean", default: value, description });
@@ -17,9 +29,10 @@
     ...object({
       calendarUrl: string("", "Arbiter HTTPS iCalendar subscription URL. Required.", { format: "uri" }),
       arbiterSchoolId: string("", "Numeric school ID from /School/<id>. If omitted, automatic logo discovery is skipped."),
-      schoolName: string("", "Optional school name used by the setup preview simulator; the athletics module does not render a school header."),
-      schoolLogo: string("", "Optional module-relative school-logo path, reserved for future screen layout. The athletics panes do not render it."),
-      backgroundImage: string("", "Optional module-relative background-image path, reserved for future screen layout. The athletics panes do not render it."),
+      schoolName: string("", "Optional school name shown above the athletics panes."),
+      schoolLogo: string("", "Optional module-relative school logo shown beside the Home Games heading."),
+      backgroundImage: string("", "Optional module-relative background image shown behind the athletics display."),
+      displayFont: string("default", "Display font for normal text across the MagicMirror board.", { enum: Object.keys(displayFonts) }),
       timeZone: string("", "School IANA timezone. Empty uses the display system timezone; also interprets floating event times."),
       locale: string("en-US", "Locale for dates and times. Interface labels are currently English."),
       timeFormat: string("12h", "Time display format.", { enum: ["12h", "24h"] }),
@@ -123,5 +136,6 @@
     config.logos.overrides = config.logos.overrides.map(entry => ({ ...entry, image: imageUrl(entry.image) }));
     return config;
   }
-  return { schema, defaults, normalize, arbiterUrl, imageUrl, relativeImagePath };
+  function displayFontFamily(value) { return displayFonts[value] || displayFonts.default; }
+  return { schema, defaults, normalize, arbiterUrl, imageUrl, relativeImagePath, displayFonts, displayFontFamily };
 });

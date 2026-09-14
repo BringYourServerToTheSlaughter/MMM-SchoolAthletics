@@ -18,6 +18,7 @@
       timeZone: validTimeZone(browserZone) ? browserZone : (defaults.timeZone || "UTC"),
       accentColor: defaults.theme.homeAccent,
       schoolLogo: defaults.schoolLogo, backgroundImage: defaults.backgroundImage,
+      displayFont: defaults.displayFont,
       // Screen choices belong to this page only, not the athletics runtime config.
       showDateTime: true, showSchoolName: true, showWeather: false, outputMode: "module", latitude: "", longitude: ""
     };
@@ -35,12 +36,12 @@
     if (state.outputMode === "clean") return [
       "Replace the entire existing modules: [...] section with this section; do not append it. Keep the rest of config.js.",
       "Clean layout always includes clock/date at top_left.",
-      state.showSchoolName ? "School name is retained in athletics config; arrange a separate header at top_center. No school-name module is generated." : "School name: leave the companion header off.",
+      state.showSchoolName ? "School name is retained in athletics config and appears above the athletics panes." : "School name: leave the athletics header off.",
       "Apply preserves one existing current-weather widget at top_right when safely identifiable, independently of preview toggles. If none exists, Apply uses valid supplied coordinates for current Open-Meteo weather. Otherwise weather is omitted. Copied output has no weather settings; retain your configured current-weather entry manually."
     ];
     return [
       state.showDateTime ? "Date/time: enable a separate clock module at top_left." : "Date/time: leave the companion clock off.",
-      state.showSchoolName ? "School name: arrange a separate school-name header at top_center." : "School name: leave the companion header off.",
+      state.showSchoolName ? "School name appears above the athletics panes." : "School name: leave the athletics header off.",
       state.showWeather ? "Weather: configure a separate weather module at top_right with your provider settings." : "Weather: leave the companion weather module off.",
       "These choices are reminders; this snippet does not configure companion modules."
     ];
@@ -61,6 +62,7 @@
       catch { errors[key] = "Use a relative image path, such as images/school-logo.png."; }
     }
     for (const key of ["schoolName", "arbiterSchoolId"]) if (text(key)) candidate[key] = text(key);
+    candidate.displayFont = text("displayFont") || shared.defaults().displayFont;
     // Let the runtime validator enforce the full definition, including numeric ID and bounds.
     if (!Object.keys(errors).length) {
       try { shared.normalize(candidate); }
@@ -70,7 +72,7 @@
       }
     }
     const notes = companionNotes(state);
-    if (candidate.schoolLogo || candidate.backgroundImage) notes.push("Image paths are reserved for a future screen layout; the athletics panes do not display these images yet.");
+    if (candidate.schoolLogo) notes.push("School logo is used by the setup preview. The runtime athletics display does not render a school logo.");
     if (Object.keys(errors).length) return { errors, notes, output: "", entry: null };
     const entry = { module: "MMM-SchoolAthletics", position: "middle_center", config: candidate };
     const modules = state.outputMode === "clean" || state.showDateTime ? [{ module: "clock", position: "top_left" }, entry] : [entry];

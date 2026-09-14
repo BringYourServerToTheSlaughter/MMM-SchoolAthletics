@@ -18,17 +18,34 @@
     "schoolName": {
       "type": "string",
       "default": "",
-      "description": "Optional school name used by the setup preview simulator; the athletics module does not render a school header."
+      "description": "Optional school name shown above the athletics panes."
     },
     "schoolLogo": {
       "type": "string",
       "default": "",
-      "description": "Optional module-relative school-logo path, reserved for future screen layout. The athletics panes do not render it."
+      "description": "Optional module-relative school logo shown beside the Home Games heading."
     },
     "backgroundImage": {
       "type": "string",
       "default": "",
-      "description": "Optional module-relative background-image path, reserved for future screen layout. The athletics panes do not render it."
+      "description": "Optional module-relative background image shown behind the athletics display."
+    },
+    "displayFont": {
+      "type": "string",
+      "default": "default",
+      "description": "Display font for normal text across the MagicMirror board.",
+      "enum": [
+        "default",
+        "arial",
+        "verdana",
+        "trebuchet",
+        "georgia",
+        "montserrat",
+        "oswald",
+        "robotoSlab",
+        "merriweather",
+        "bebasNeue"
+      ]
     },
     "timeZone": {
       "type": "string",

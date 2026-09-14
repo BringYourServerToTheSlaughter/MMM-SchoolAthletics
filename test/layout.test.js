@@ -19,3 +19,10 @@ test('bottom modules constrain space and oversized headers never create negative
   assert.deepEqual(bounds({top:40,bottom:960},1000,[{bottom:200}],[{top:900}],20),{top:180,height:660});
   assert.equal(bounds({top:40,bottom:960},1000,[{bottom:990}],[],20).height,0);
 });
+test('school identity is positioned independently above the athletics pane grid',()=>{
+  const css=require('node:fs').readFileSync('MMM-SchoolAthletics.css','utf8');
+  assert.match(css,/\.school-athletics-school-name \{\s*position: fixed;/);
+	assert.match(css,/top: clamp\(52px, 6vh, 78px\)/);
+  assert.match(css,/font-size: clamp\(44px, 2\.7vw, 56px\)/);
+  assert.match(css,/\.school-athletics-school-logo \{\s*width: clamp\(70px, 6vw, 122px\)/);
+});

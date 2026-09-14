@@ -2,7 +2,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const preview = require("../setup/preview-model");
-const values = { schoolName: "Example Academy", accentColor: "#123456", schoolLogo: "images/logo.png", backgroundImage: "images/background.jpg", showDateTime: true, showSchoolName: true, showWeather: false };
+const values = { schoolName: "Example Academy", accentColor: "#123456", schoolLogo: "images/logo.png", backgroundImage: "images/background.jpg", displayFont: "georgia", showDateTime: true, showSchoolName: true, showWeather: false };
 const controls = { preset: "1920x1080", safeArea: false, mode: "typical" };
 test("preview presets have their exact logical resolutions", () => {
   assert.deepEqual(Object.values(preview.presets), [[1920,1080],[3840,2160],[1366,768],[1920,1200]]);
@@ -30,6 +30,7 @@ test("preview state reuses setup values without mutating config", () => {
   for (const key of Object.keys(values)) assert.equal(state[key], values[key]);
   assert.equal(JSON.stringify(values), before);
   assert.equal(preview.state({}, controls).schoolName, "Example High School");
+  assert.equal(state.displayFont, "georgia");
 });
 test("header toggles are independent and safe-area changes do not change game layout state", () => {
   for (const key of ["showDateTime", "showSchoolName", "showWeather"]) assert.equal(preview.state({ ...values, [key]: false }, controls)[key], false);
@@ -59,5 +60,6 @@ test("overflow measurements detect header, vertical pane, and clipped row bounds
   assert.match(html, /<section class="pane home"><h2><img id="school-logo"[^>]*><span>HOME GAMES<\/span><\/h2>/);
   assert.match(html, /<div id="school"><strong id="school-name"><\/strong><\/div>/);
   assert.match(html, /<section class="pane away"><h2>AWAY GAMES<\/h2>/);
-  assert.equal((html.match(/id="school-logo"/g) || []).length, 1);
+ assert.equal((html.match(/id="school-logo"/g) || []).length, 1);
+  assert.match(require("node:fs").readFileSync("setup/preview.css", "utf8"), /#school-logo \{ width: 3\.2em; height: 3\.2em;/);
 });

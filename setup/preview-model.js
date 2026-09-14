@@ -28,6 +28,7 @@
     return { ...size, safeArea: controls.safeArea === true, mode: controls.mode, games: mockData(controls.mode),
       schoolName: values.schoolName || "Example High School", accentColor: /^#[a-f\d]{6}$/i.test(values.accentColor || "") ? values.accentColor : "#ffffff",
       schoolLogo: values.schoolLogo || "", backgroundImage: values.backgroundImage || "",
+      displayFont: values.displayFont || "default",
       showDateTime: values.showDateTime === true, showSchoolName: values.showSchoolName === true, showWeather: values.showWeather === true };
   }
   function scale(size, availableWidth, maxHeight = 480) { return Math.max(0, Math.min(1, availableWidth / size.width, maxHeight / size.height)); }

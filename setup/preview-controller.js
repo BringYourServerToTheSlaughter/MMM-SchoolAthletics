@@ -30,7 +30,7 @@
     byId("preview-images").textContent = "";
     byId("preview-status").textContent = "Checking layout…";
     byId("preview-custom").hidden = byId("preview-resolution").value !== "custom";
-    const values = Object.fromEntries(["schoolName", "accentColor", "schoolLogo", "backgroundImage", "showDateTime", "showSchoolName", "showWeather"].map(key => [key, byId(key).type === "checkbox" ? byId(key).checked : byId(key).value]));
+    const values = Object.fromEntries(["schoolName", "accentColor", "schoolLogo", "backgroundImage", "displayFont", "showDateTime", "showSchoolName", "showWeather"].map(key => [key, byId(key).type === "checkbox" ? byId(key).checked : byId(key).value]));
     try {
       current = model.state(values, { preset: byId("preview-resolution").value, width: byId("preview-width").value, height: byId("preview-height").value, safeArea: byId("preview-safe").checked, mode: byId("preview-data").value });
       byId("preview-error").hidden = true;

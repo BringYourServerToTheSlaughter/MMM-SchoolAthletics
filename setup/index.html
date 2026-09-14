@@ -32,14 +32,14 @@
       <div class="field">
         <label for="calendarUrl">Arbiter calendar URL <span class="required">required</span></label>
         <input id="calendarUrl" name="calendarUrl" type="url" required placeholder="https://…" spellcheck="false" autocomplete="off" aria-describedby="calendarUrl-help calendarUrl-error">
-        <p class="help" id="calendarUrl-help">Paste the iCal calendar subscription URL for your school.</p>
+        <p class="help" id="calendarUrl-help">Paste the iCal calendar subscription URL for your school. <a href="https://arbitersportshelp.zendesk.com/hc/en-us/articles/19923868714893-Subscribing-to-iCal-Feed-Schools" target="_blank" rel="noopener noreferrer">Need help finding your calendar link? See ArbiterSports’ iCal instructions.</a></p>
         <p class="error" id="calendarUrl-error" hidden></p>
       </div>
       <div class="pair">
         <div class="field">
           <label for="arbiterSchoolId">Arbiter school ID</label>
           <input id="arbiterSchoolId" name="arbiterSchoolId" type="text" inputmode="numeric" placeholder="12345" aria-describedby="arbiterSchoolId-help arbiterSchoolId-error">
-          <p class="help" id="arbiterSchoolId-help">Optional. Used for automatic opponent-logo discovery.</p>
+          <p class="help" id="arbiterSchoolId-help">Optional. Used for automatic opponent-logo discovery. Find your school on ArbiterLive, then copy the number after “entityId=” in the URL. For example, <a href="https://www.arbiterlive.com/Teams?entityId=12345" target="_blank" rel="noopener noreferrer">https://www.arbiterlive.com/Teams?entityId=12345</a> means School ID = 12345.</p>
           <p class="error" id="arbiterSchoolId-error" hidden></p>
         </div>
         <div class="field">
@@ -53,6 +53,23 @@
         <label for="accentColor">School accent color</label>
         <div class="color-row"><input id="accentColor" name="accentColor" type="color" aria-describedby="accentColor-value accentColor-error"><output id="accentColor-value" for="accentColor"></output><span class="help">Used for the Home pane.</span></div>
         <p class="error" id="accentColor-error" hidden></p>
+      </div>
+      <div class="field">
+        <label for="displayFont">Display Font</label>
+        <select id="displayFont" name="displayFont" aria-describedby="displayFont-help displayFont-error">
+          <option value="default">MagicMirror default</option>
+          <option value="arial">Arial</option>
+          <option value="verdana">Verdana</option>
+          <option value="trebuchet">Trebuchet MS</option>
+          <option value="georgia">Georgia</option>
+          <option value="montserrat">Montserrat</option>
+          <option value="oswald">Oswald</option>
+          <option value="robotoSlab">Roboto Slab</option>
+          <option value="merriweather">Merriweather</option>
+          <option value="bebasNeue">Bebas Neue</option>
+        </select>
+        <p class="help" id="displayFont-help">Applies normal text across the board. Weather and other icon fonts keep their own icon styling.</p>
+        <p class="error" id="displayFont-error" hidden></p>
       </div>
       <div class="pair">
         <div class="field">
@@ -75,7 +92,7 @@
           <p id="backgroundImage-upload-status" class="help" role="status">Image upload requires the local setup helper. You can still enter an image path manually.</p>
         </div>
       </div>
-      <p class="notice" id="image-note">Image paths are saved in the generated text for a future screen layout; the athletics panes do not display them yet. Enter a module-relative path, or use the local helper to copy an image into this module. No image is sent to an external service.</p>
+      <p class="notice" id="image-note">Background images fill the athletics board, and school logos appear beside Home Games. Enter a module-relative path, or use the local helper to copy an image into this module. No image is sent to an external service.</p>
       <fieldset>
         <legend>Top of your display</legend>
         <div class="choices">

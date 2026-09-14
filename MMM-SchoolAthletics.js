@@ -64,6 +64,8 @@ Module.register("MMM-SchoolAthletics", {
 
 	suspend() {
 		this.suspended = true;
+		this.restoreBoardBackground();
+		this.restoreBoardFont();
 		clearInterval(this.timer);
 		clearInterval(this.dayTimer);
 		clearTimeout(this.watchdog);
@@ -121,6 +123,8 @@ Module.register("MMM-SchoolAthletics", {
 	},
 
 	getDom() {
+		this.setBoardBackground();
+		this.setBoardFont();
 		const wrapper = document.createElement("div");
 		wrapper.className = `school-athletics-wrapper layout-${this.config.layout || "auto"}`;
 		if (this.setupRequired) {
@@ -137,6 +141,13 @@ Module.register("MMM-SchoolAthletics", {
 			wrapper.style.setProperty("--school-home-accent", this.config.theme.homeAccent);
 			wrapper.style.setProperty("--school-away-accent", this.config.theme.awayAccent);
 		}
+		if (this.config.schoolName) {
+			wrapper.className += " has-school-name";
+			const schoolName = document.createElement("div");
+			schoolName.className = "school-athletics-school-name";
+			schoolName.textContent = this.config.schoolName;
+			wrapper.appendChild(schoolName);
+		}
 
 		if (this.loading) {
 			wrapper.appendChild(this.message("Loading today’s games…", "loading"));
@@ -151,6 +162,45 @@ Module.register("MMM-SchoolAthletics", {
 		wrapper.appendChild(this.buildPane("home", "HOME GAMES", this.schedule.home));
 		wrapper.appendChild(this.buildPane("away", "AWAY GAMES", this.schedule.away));
 		return wrapper;
+	},
+
+	setBoardBackground() {
+		if (!document.body?.style) return;
+		if (!this.config.backgroundImage) return this.restoreBoardBackground();
+		if (!this.boardBackground) {
+			this.boardBackground = {
+				image: document.body.style.backgroundImage,
+				size: document.body.style.backgroundSize,
+				position: document.body.style.backgroundPosition,
+				repeat: document.body.style.backgroundRepeat
+			};
+		}
+		document.body.style.backgroundImage = `url("${this.file(this.config.backgroundImage)}")`;
+		document.body.style.backgroundSize = "cover";
+		document.body.style.backgroundPosition = "center";
+		document.body.style.backgroundRepeat = "no-repeat";
+	},
+
+	restoreBoardBackground() {
+		if (!this.boardBackground || !document.body?.style) return;
+		document.body.style.backgroundImage = this.boardBackground.image;
+		document.body.style.backgroundSize = this.boardBackground.size;
+		document.body.style.backgroundPosition = this.boardBackground.position;
+		document.body.style.backgroundRepeat = this.boardBackground.repeat;
+		this.boardBackground = null;
+	},
+
+	setBoardFont() {
+		if (!document.body?.style) return;
+		if (this.config.displayFont === "default") return this.restoreBoardFont();
+		if (!Object.hasOwn(this, "boardFont")) this.boardFont = document.body.style.fontFamily;
+		document.body.style.fontFamily = SchoolAthleticsConfig.displayFontFamily(this.config.displayFont);
+	},
+
+	restoreBoardFont() {
+		if (!Object.hasOwn(this, "boardFont") || !document.body?.style) return;
+		document.body.style.fontFamily = this.boardFont;
+		delete this.boardFont;
 	},
 
 	message(text, type) {
@@ -169,7 +219,17 @@ Module.register("MMM-SchoolAthletics", {
 		header.className = "school-athletics-pane-header";
 
 		const title = document.createElement("h2");
-		title.textContent = heading;
+		if (kind === "home" && this.config.schoolLogo) {
+			const logo = document.createElement("img");
+			logo.className = "school-athletics-school-logo";
+			logo.src = this.file(this.config.schoolLogo);
+			logo.alt = this.config.schoolName ? `${this.config.schoolName} logo` : "School logo";
+			logo.addEventListener("error", () => logo.remove());
+			title.appendChild(logo);
+		}
+		const headingText = document.createElement("span");
+		headingText.textContent = heading;
+		title.appendChild(headingText);
 		header.appendChild(title);
 
 		const date = document.createElement("div");
