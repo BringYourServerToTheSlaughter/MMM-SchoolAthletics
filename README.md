@@ -70,6 +70,10 @@ Downloaded logos live in ignored `public/logos/v2/`, with metadata in `.cache/lo
 
 ## Display preview
 
+![Sample athletics display with a dragon background and Home/Away game panes](images/SampleSetup.png)
+
+Example MagicMirror setup with the dragon background, clock, and weather.
+
 Choose **1920×1080**, **3840×2160**, **1366×768**, **1920×1200**, or custom dimensions (320–7680 pixels per axis). The selected logical display scales proportionally to fit the page, with a reserved clock/name/weather band above the Home/Away panes.
 
 **Typical**, **Long Names**, and **Maximum Games** use mock data to test wrapping and crowding. **Show safe area** adds a visual 4% inset without changing layout. A status reports obvious header overflow, pane overflow, or clipped rows. Stress modes may intentionally exceed the available area. The simulator is approximate; actual MagicMirror themes/fonts may differ. It does not test live calendars, weather, or TV physical size.
