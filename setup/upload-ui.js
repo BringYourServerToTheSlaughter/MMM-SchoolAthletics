@@ -6,11 +6,13 @@
   const fields = ["schoolLogo", "backgroundImage"];
   const byId = id => document.getElementById(id);
   const filename = value => value.split(/[\\/]/).pop();
-  byId("sample-background").addEventListener("click", () => {
-    byId("backgroundImage").value = "images/sample-background.png";
-    byId("backgroundImage").dispatchEvent(new Event("input", { bubbles: true }));
-    byId("backgroundImage-upload-status").textContent = "Sample background selected. Configuration and preview updated.";
-  });
+  for (const [id, label] of [["sample-background", "Mountain"], ["sample-dragon-background", "Dragon"]]) {
+    byId(id).addEventListener("click", () => {
+      byId("backgroundImage").value = `images/${id}.png`;
+      byId("backgroundImage").dispatchEvent(new Event("input", { bubbles: true }));
+      byId("backgroundImage-upload-status").textContent = `${label} sample background selected. Configuration and preview updated.`;
+    });
+  }
   async function request(url, options) {
     const response = await fetch(url, options);
     const result = await response.json();

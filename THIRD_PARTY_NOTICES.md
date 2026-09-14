@@ -63,8 +63,3 @@ part of the source repository.
 
 The PingState name and logo, including `setup/assets/pingstate.png`, are not
 licensed under the MMM-SchoolAthletics MIT License.
-
-The preview image at `docs/assets/mmm-schoolathletics-preview.png` may depict
-school names, logos, mascots, or other third-party marks. Those marks and the
-preview image are not licensed for reuse under the MMM-SchoolAthletics MIT
-License.

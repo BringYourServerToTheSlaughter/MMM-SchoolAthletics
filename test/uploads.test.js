@@ -68,11 +68,24 @@ test('standalone setup redirects uploads only to a clearly installed MagicMirror
  assert.equal(response.status,200);assert.equal(response.result.path,'images/uploads/board.png');assert.ok(fs.existsSync(path.join(installed,response.result.path)));assert.equal(fs.existsSync(path.join(standalone,response.result.path)),false);
 });
 
-test('bundled sample is a valid optional PNG and selection updates the existing path',async()=>{
- assert.equal((await sharp('images/sample-background.png').metadata()).format,'png');
- const h=harness('8080');h.get('sample-background').handlers.click();assert.equal(h.get('backgroundImage').value,'images/sample-background.png');assert.equal(h.events(),1);
+test('both bundled samples are optional PNGs and update configuration in helper and static setup',async()=>{
+ const html=fs.readFileSync('setup/index.html','utf8');
  assert.equal(setup.initialState('UTC').backgroundImage,'');
- assert.equal(setup.generate({...setup.initialState('UTC'),calendarUrl:'https://www.arbiterlive.com/calendar/example.ics',backgroundImage:h.get('backgroundImage').value}).entry.config.backgroundImage,'images/sample-background.png');
+ for(const port of ['8080','8081']) {
+  const h=harness(port);await new Promise(r=>setImmediate(r));
+  let selections=0;
+  for(const [id,label] of [['sample-background','Mountain'],['sample-dragon-background','Dragon']]) {
+   const asset=`images/${id}.png`;
+   assert.equal((await sharp(asset).metadata()).format,'png');
+   assert.ok(html.includes(`id="${id}"`));
+   h.get(id).handlers.click();
+   assert.equal(h.get('backgroundImage').value,asset);
+   assert.equal(h.events(),++selections);
+   assert.match(h.get('backgroundImage-upload-status').textContent,new RegExp(label));
+   assert.equal(setup.generate({...setup.initialState('UTC'),calendarUrl:'https://www.arbiterlive.com/calendar/example.ics',backgroundImage:h.get('backgroundImage').value}).entry.config.backgroundImage,asset);
+  }
+  assert.equal(h.calls.filter(call=>call.options).length,0);
+ }
 });
 
 test('preview frame renders uploaded logo and background from existing state fields',()=>{

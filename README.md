@@ -2,12 +2,6 @@
 
 Display school athletics schedules in Home and Away panes on MagicMirror², with optional opponent logos. Includes a local configuration generator and mock display preview. This project is not affiliated with or endorsed by ArbiterSports.
 
-## Preview
-
-![MMM-SchoolAthletics displaying home and away school athletics schedules](docs/assets/mmm-schoolathletics-preview.png)
-
-*Example school athletics display with current and upcoming home and away events.*
-
 ## Install
 
 Requires an existing MagicMirror² installation and Node.js 22 or later, also meeting your MagicMirror² version's requirements. Python 3 is needed only for the setup-page server.
@@ -70,7 +64,7 @@ logos: {
 }
 ```
 
-Image paths must point to locally available module assets. You can still enter paths manually. With `node setup/server.js`, choose PNG, JPEG, or WebP files directly in setup (8 MiB maximum, 24 megapixels, non-animated). Images are validated and copied only into this module’s `images/uploads/`; nothing is sent to an external service. Saved paths immediately update configuration and preview. Duplicate names receive a numeric suffix. Uploaded files are ignored by Git and retained until you remove them manually. `images/sample-background.png` is an optional project-owned template: click **Use sample background** to select it. Static/Python setup remains manual-path/copy-only, with the bundled sample available. Setup `backgroundImage` paths such as `images/background.png` render behind the runtime display, while `schoolLogo` appears beside Home Games. Display Font changes normal board text while preserving icon-specific fonts. Runtime opponent-logo overrides additionally support `/modules/...` paths and HTTPS images. Use small, optimized images and transparent-background PNG/SVG logos where appropriate; there is no SVG processing.
+Image paths must point to locally available module assets. You can still enter paths manually. With `node setup/server.js`, choose PNG, JPEG, or WebP files directly in setup (8 MiB maximum, 24 megapixels, non-animated). Images are validated and copied only into this module’s `images/uploads/`; nothing is sent to an external service. Saved paths immediately update configuration and preview. Duplicate names receive a numeric suffix. Uploaded files are ignored by Git and retained until you remove them manually. The optional bundled templates are **Use mountain sample** (`images/sample-background.png`) and **Use dragon sample** (`images/sample-dragon-background.png`, red/black/gray). Both are generic, with no school name, and work offline in helper and static/Python setup. Neither is selected by default; clicking a sample updates configuration and preview. Static/Python uploads remain manual-path/copy-only. Setup `backgroundImage` paths such as `images/background.png` render behind the runtime display, while `schoolLogo` appears beside Home Games. Display Font changes normal board text while preserving icon-specific fonts. Runtime opponent-logo overrides additionally support `/modules/...` paths and HTTPS images. Use small, optimized images and transparent-background PNG/SVG logos where appropriate; there is no SVG processing.
 
 Downloaded logos live in ignored `public/logos/v2/`, with metadata in `.cache/logos.json`. Successful and failed lookups expire and reuse cached work; managed images have a default 50 MiB budget. Temporary downloads may exceed that budget until cleanup. Manual images and legacy files directly under `public/logos/` are outside managed eviction.
 
