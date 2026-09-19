@@ -29,6 +29,20 @@ Module.register("MMM-SchoolAthletics", {
 			this.domReady = true;
 			this.observeLayout();
 			this.updateDom(0);
+			return;
+		}
+
+		if (notification === "SCENES_CHANGED") {
+			const module = document.getElementById(this.identifier);
+			if (!module) return;
+
+			const hidden = module.classList.contains("hidden");
+
+			if (hidden && !this.suspended) {
+				this.suspend();
+			} else if (!hidden && this.suspended) {
+				this.resume();
+			}
 		}
 	},
 
